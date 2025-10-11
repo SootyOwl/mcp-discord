@@ -12,6 +12,7 @@ A Discord MCP (Model Context Protocol) server that enables AI assistants to inte
 MCP-Discord provides the following Discord-related functionalities:
 
 - Login to Discord bot
+- List guilds (servers) the bot is a member of
 - Get server information
 - Read/delete channel messages
 - Send messages to specified channels (using either channel IDs or channel names)
@@ -267,6 +268,8 @@ You can use Docker containers with both Claude and Cursor:
 
 ### Basic Functions
 
+- `discord_login`: Login to Discord using the configured token
+- `discord_list_guilds`: List all Discord servers (guilds) the bot is a member of
 - `discord_send`: Send a message to a specified channel (supports both channel ID and channel name)
 - `discord_get_server_info`: Get Discord server information
 
