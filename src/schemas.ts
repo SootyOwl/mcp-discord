@@ -130,3 +130,5 @@ export const DeleteWebhookSchema = z.object({
     webhookToken: z.string().optional(),
     reason: z.string().optional()
 });
+
+export const ListGuildsSchema = z.object({});

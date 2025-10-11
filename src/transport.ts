@@ -26,7 +26,8 @@ import {
   deleteWebhookHandler,
   editCategoryHandler,
   createCategoryHandler,
-  deleteCategoryHandler
+  deleteCategoryHandler,
+  listGuildsHandler
 } from './tools/tools.js';
 import { Client, GatewayIntentBits } from "discord.js";
 import { info, error } from './logger.js';

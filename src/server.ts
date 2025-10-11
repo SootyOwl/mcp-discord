@@ -29,7 +29,8 @@ import {
   deleteWebhookHandler,
   createCategoryHandler,
   editCategoryHandler,
-  deleteCategoryHandler
+  deleteCategoryHandler,
+  listGuildsHandler
 } from './tools/tools.js';
 import { MCPTransport } from './transport.js';
 import { info, error } from './logger.js';
@@ -176,6 +177,11 @@ export class DiscordMCPServer {
           case "discord_delete_webhook":
             this.logClientState("before discord_delete_webhook handler");
             toolResponse = await deleteWebhookHandler(args, this.toolContext);
+            return toolResponse;
+
+          case "discord_list_guilds":
+            this.logClientState("before discord_list_guilds handler");
+            toolResponse = await listGuildsHandler(args, this.toolContext);
             return toolResponse;
 
           default:
