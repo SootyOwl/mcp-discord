@@ -8,7 +8,8 @@ import {
   GetServerInfoSchema,
   CreateCategorySchema,
   EditCategorySchema,
-  DeleteCategorySchema
+  DeleteCategorySchema,
+  ListServersSchema
 } from "../schemas.js";
 import { handleDiscordError } from "../errorHandler.js";
 
@@ -351,6 +352,42 @@ export async function getServerInfoHandler(
 
     return {
       content: [{ type: "text", text: JSON.stringify(guildInfo, null, 2) }]
+    };
+  } catch (error) {
+    return handleDiscordError(error);
+  }
+}
+
+// List servers handler
+export async function listServersHandler(
+  args: unknown,
+  context: ToolContext
+): Promise<ToolResponse> {
+  ListServersSchema.parse(args);
+  try {
+    if (!context.client.isReady()) {
+      return {
+        content: [{ type: "text", text: "Discord client not logged in." }],
+        isError: true
+      };
+    }
+
+    const guilds = await context.client.guilds.fetch();
+    
+    if (guilds.size === 0) {
+      return {
+        content: [{ type: "text", text: "No servers found. The bot is not a member of any servers." }]
+      };
+    }
+
+    const guildsInfo = guilds.map(guild => ({
+      id: guild.id,
+      name: guild.name,
+      icon: guild.iconURL()
+    }));
+
+    return {
+      content: [{ type: "text", text: JSON.stringify(guildsInfo, null, 2) }]
     };
   } catch (error) {
     return handleDiscordError(error);

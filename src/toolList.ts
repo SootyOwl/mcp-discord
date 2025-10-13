@@ -292,5 +292,14 @@ export const toolList = [
       },
       required: ["webhookId"]
     }
+  },
+  {
+    name: "discord_list_servers",
+    description: "Lists all Discord servers the bot is a member of",
+    inputSchema: {
+      type: "object",
+      properties: {},
+      required: []
+    }
   }
 ]; 
