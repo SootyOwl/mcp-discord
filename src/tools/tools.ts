@@ -18,7 +18,7 @@ import {
   createCategoryHandler,
   editCategoryHandler,
   deleteCategoryHandler,
-  listGuildsHandler
+  listServersHandler
 } from './channel.js';
 import {
   addReactionHandler,
@@ -57,7 +57,7 @@ export {
   createCategoryHandler,
   editCategoryHandler,
   deleteCategoryHandler,
-  listGuildsHandler
+  listServersHandler
 };
 
 // Export common types

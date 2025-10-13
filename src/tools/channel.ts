@@ -9,7 +9,7 @@ import {
   CreateCategorySchema,
   EditCategorySchema,
   DeleteCategorySchema,
-  ListGuildsSchema
+  ListServersSchema
 } from "../schemas.js";
 import { handleDiscordError } from "../errorHandler.js";
 
@@ -358,12 +358,12 @@ export async function getServerInfoHandler(
   }
 }
 
-// List guilds handler
-export async function listGuildsHandler(
+// List servers handler
+export async function listServersHandler(
   args: unknown,
   context: ToolContext
 ): Promise<ToolResponse> {
-  ListGuildsSchema.parse(args);
+  ListServersSchema.parse(args);
   try {
     if (!context.client.isReady()) {
       return {
@@ -376,7 +376,7 @@ export async function listGuildsHandler(
     
     if (guilds.size === 0) {
       return {
-        content: [{ type: "text", text: "No guilds found. The bot is not a member of any servers." }]
+        content: [{ type: "text", text: "No servers found. The bot is not a member of any servers." }]
       };
     }
 

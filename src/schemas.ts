@@ -131,4 +131,4 @@ export const DeleteWebhookSchema = z.object({
     reason: z.string().optional()
 });
 
-export const ListGuildsSchema = z.object({});
+export const ListServersSchema = z.object({});

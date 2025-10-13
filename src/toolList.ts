@@ -294,8 +294,8 @@ export const toolList = [
     }
   },
   {
-    name: "discord_list_guilds",
-    description: "Lists all Discord servers (guilds) the bot is a member of",
+    name: "discord_list_servers",
+    description: "Lists all Discord servers the bot is a member of",
     inputSchema: {
       type: "object",
       properties: {},
