@@ -130,3 +130,11 @@ export const DeleteWebhookSchema = z.object({
     webhookToken: z.string().optional(),
     reason: z.string().optional()
 });
+
+export const SearchGuildMessagesSchema = z.object({
+    guildId: z.string(),
+    content: z.string().optional(),
+    authorId: z.string().optional(),
+    channelId: z.string().optional(),
+    limit: z.number().min(1).max(25).optional().default(25)
+});

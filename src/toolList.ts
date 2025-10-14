@@ -167,6 +167,26 @@ export const toolList = [
     }
   },
   {
+    name: "discord_search_guild_messages",
+    description: "Searches for messages in a Discord guild/server using Discord's search functionality. Note: This uses an undocumented Discord API endpoint and may not work with all bot tokens.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        guildId: { type: "string" },
+        content: { type: "string" },
+        authorId: { type: "string" },
+        channelId: { type: "string" },
+        limit: {
+          type: "number",
+          minimum: 1,
+          maximum: 25,
+          default: 25
+        }
+      },
+      required: ["guildId"]
+    }
+  },
+  {
     name: "discord_add_reaction",
     description: "Adds an emoji reaction to a specific Discord message",
     inputSchema: {

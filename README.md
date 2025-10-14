@@ -14,6 +14,7 @@ MCP-Discord provides the following Discord-related functionalities:
 - Login to Discord bot
 - Get server information
 - Read/delete channel messages
+- Search messages in a guild/server (undocumented API)
 - Send messages to specified channels (using either channel IDs or channel names)
 - Retrieve forum channel lists
 - Create/delete/reply to forum posts
@@ -286,6 +287,7 @@ You can use Docker containers with both Claude and Cursor:
 ### Messages and Reactions
 
 - `discord_read_messages`: Read channel messages
+- `discord_search_guild_messages`: Search for messages in a guild/server (uses undocumented Discord API)
 - `discord_add_reaction`: Add a reaction to a message
 - `discord_add_multiple_reactions`: Add multiple reactions to a message
 - `discord_remove_reaction`: Remove a reaction from a message

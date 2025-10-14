@@ -17,7 +17,8 @@ import {
   getServerInfoHandler,
   createCategoryHandler,
   editCategoryHandler,
-  deleteCategoryHandler
+  deleteCategoryHandler,
+  searchGuildMessagesHandler
 } from './channel.js';
 import {
   addReactionHandler,
@@ -55,7 +56,8 @@ export {
   deleteWebhookHandler,
   createCategoryHandler,
   editCategoryHandler,
-  deleteCategoryHandler
+  deleteCategoryHandler,
+  searchGuildMessagesHandler
 };
 
 // Export common types

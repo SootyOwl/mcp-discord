@@ -29,7 +29,8 @@ import {
   deleteWebhookHandler,
   createCategoryHandler,
   editCategoryHandler,
-  deleteCategoryHandler
+  deleteCategoryHandler,
+  searchGuildMessagesHandler
 } from './tools/tools.js';
 import { MCPTransport } from './transport.js';
 import { info, error } from './logger.js';
@@ -136,6 +137,11 @@ export class DiscordMCPServer {
           case "discord_get_server_info":
             this.logClientState("before discord_get_server_info handler");
             toolResponse = await getServerInfoHandler(args, this.toolContext);
+            return toolResponse;
+
+          case "discord_search_guild_messages":
+            this.logClientState("before discord_search_guild_messages handler");
+            toolResponse = await searchGuildMessagesHandler(args, this.toolContext);
             return toolResponse;
 
           case "discord_add_reaction":

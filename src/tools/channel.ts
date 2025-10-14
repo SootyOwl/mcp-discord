@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ChannelType } from "discord.js";
+import { Routes } from "discord-api-types/v10";
 import { ToolContext, ToolResponse } from "./types.js";
 import { 
   CreateTextChannelSchema, 
@@ -8,7 +9,8 @@ import {
   GetServerInfoSchema,
   CreateCategorySchema,
   EditCategorySchema,
-  DeleteCategorySchema
+  DeleteCategorySchema,
+  SearchGuildMessagesSchema
 } from "../schemas.js";
 import { handleDiscordError } from "../errorHandler.js";
 
@@ -352,6 +354,99 @@ export async function getServerInfoHandler(
     return {
       content: [{ type: "text", text: JSON.stringify(guildInfo, null, 2) }]
     };
+  } catch (error) {
+    return handleDiscordError(error);
+  }
+}
+
+// Guild message search handler
+export async function searchGuildMessagesHandler(
+  args: unknown,
+  context: ToolContext
+): Promise<ToolResponse> {
+  const { guildId, content, authorId, channelId, limit } = SearchGuildMessagesSchema.parse(args);
+  try {
+    if (!context.client.isReady()) {
+      return {
+        content: [{ type: "text", text: "Discord client not logged in." }],
+        isError: true
+      };
+    }
+
+    // Verify guild exists
+    const guild = await context.client.guilds.fetch(guildId);
+    if (!guild) {
+      return {
+        content: [{ type: "text", text: `Cannot find guild with ID: ${guildId}` }],
+        isError: true
+      };
+    }
+
+    // Build query parameters for the search
+    const queryParams: Record<string, string> = {};
+    if (content) queryParams.content = content;
+    if (authorId) queryParams.author_id = authorId;
+    if (channelId) queryParams.channel_id = channelId;
+    if (limit) queryParams.limit = limit.toString();
+
+    // Use the undocumented search endpoint
+    // Note: This is an undocumented Discord API endpoint
+    const endpoint = `/guilds/${guildId}/messages/search` as any;
+    
+    try {
+      const searchResults = await context.client.rest.get(endpoint, { 
+        query: new URLSearchParams(queryParams)
+      }) as any;
+
+      // Check if we got results
+      if (!searchResults || !searchResults.messages || searchResults.messages.length === 0) {
+        return {
+          content: [{ type: "text", text: "No messages found matching the search criteria" }]
+        };
+      }
+
+      // Format the search results
+      const formattedResults = searchResults.messages.map((messageGroup: any[]) => {
+        // Each result is an array with the matching message and context
+        const message = messageGroup[0]; // The first message is the match
+        return {
+          id: message.id,
+          content: message.content,
+          author: {
+            id: message.author.id,
+            username: message.author.username,
+            discriminator: message.author.discriminator
+          },
+          channelId: message.channel_id,
+          timestamp: message.timestamp,
+          attachments: message.attachments?.length || 0,
+          embeds: message.embeds?.length || 0
+        };
+      });
+
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            guildId,
+            totalResults: searchResults.total_results || formattedResults.length,
+            messages: formattedResults
+          }, null, 2)
+        }]
+      };
+    } catch (apiError: any) {
+      // If the endpoint is not available or returns an error
+      if (apiError.status === 404 || apiError.status === 405) {
+        return {
+          content: [{
+            type: "text",
+            text: "Guild message search is not available. This feature uses an undocumented Discord API endpoint that may not be accessible with bot tokens."
+          }],
+          isError: true
+        };
+      }
+      throw apiError;
+    }
   } catch (error) {
     return handleDiscordError(error);
   }
