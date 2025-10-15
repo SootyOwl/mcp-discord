@@ -14,13 +14,13 @@ import {
   createTextChannelHandler,
   deleteChannelHandler,
   readMessagesHandler,
-  getServerInfoHandler,
   createCategoryHandler,
   editCategoryHandler,
-  deleteCategoryHandler,
-  listServersHandler
+  deleteCategoryHandler
 } from './channel.js';
-import {
+import { 
+  getServerInfoHandler, 
+  listServersHandler,
   searchMessagesHandler
 } from "./server.js";
 import {
