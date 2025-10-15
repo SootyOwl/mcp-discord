@@ -27,7 +27,8 @@ import {
   editCategoryHandler,
   createCategoryHandler,
   deleteCategoryHandler,
-  listServersHandler
+  listServersHandler,
+  searchMessagesHandler   
 } from './tools/tools.js';
 import { Client, GatewayIntentBits } from "discord.js";
 import { info, error } from './logger.js';
@@ -215,6 +216,7 @@ export class StreamableHttpTransport implements MCPTransport {
                     case 'discord_edit_category':
                     case 'discord_delete_category':
                     case 'discord_list_servers':
+                    case 'discord_search_messages':
                         // Check if client is logged in
                         if (!this.toolContext!.client.isReady()) {
                             error(`Client not ready for method ${method}, client state: ${JSON.stringify({
@@ -338,8 +340,9 @@ export class StreamableHttpTransport implements MCPTransport {
                                 break;
                             case 'discord_list_servers':
                                 result = await listServersHandler(params, this.toolContext!);
-                                break;
-                                
+                            case 'discord_search_messages':
+                                result = await searchMessagesHandler(params, this.toolContext!);
+                                break;break;
                         }
                         break;
                         
@@ -506,6 +509,9 @@ export class StreamableHttpTransport implements MCPTransport {
                             
                             case 'discord_list_servers':
                                 result = await listServersHandler(toolArgs, this.toolContext!);
+                                break;
+                            case 'discord_search_messages':
+                                result = await searchMessagesHandler(toolArgs, this.toolContext!);
                                 break;
                                 
                             default:

@@ -132,3 +132,20 @@ export const DeleteWebhookSchema = z.object({
 });
 
 export const ListServersSchema = z.object({});
+
+export const SearchMessagesSchema = z.object({
+  guildId: z.string().min(1, "guildId is required"),
+  // Optional filters
+  authorId: z.string().optional(),
+  mentions: z.string().optional(),
+  has: z.enum(['link','embed','file','poll','image','video','sound','sticker','snapshot']).optional(),
+  maxId: z.string().optional(),
+  minId: z.string().optional(),
+  channelId: z.string().optional(),
+  pinned: z.boolean().optional(),
+  authorType: z.enum(['user','bot','webhook']).optional(),
+  sortBy: z.enum(['timestamp','relevance']).optional(),
+  sortOrder: z.enum(['desc','asc']).optional(),
+  limit: z.number().min(1).max(100).default(25).optional(),
+  offset: z.number().min(0).default(0).optional()
+});

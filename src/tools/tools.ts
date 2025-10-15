@@ -21,6 +21,9 @@ import {
   listServersHandler
 } from './channel.js';
 import {
+  searchMessagesHandler
+} from "./server.js";
+import {
   addReactionHandler,
   addMultipleReactionsHandler,
   removeReactionHandler,
@@ -57,7 +60,8 @@ export {
   createCategoryHandler,
   editCategoryHandler,
   deleteCategoryHandler,
-  listServersHandler
+  listServersHandler,
+  searchMessagesHandler
 };
 
 // Export common types
