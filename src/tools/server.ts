@@ -9,7 +9,7 @@ export async function searchMessagesHandler(
   args: unknown,
   context: ToolContext
 ): Promise<ToolResponse> {
-  const { guildId, authorId, mentions, has, maxId, minId, channelId, pinned, authorType, sortBy, sortOrder, limit, offset } = SearchMessagesSchema.parse(args);
+  const { guildId, content, authorId, mentions, has, maxId, minId, channelId, pinned, authorType, sortBy, sortOrder, limit, offset } = SearchMessagesSchema.parse(args);
   try {
     if (!context.client.isReady()) {
       return {
@@ -30,6 +30,7 @@ export async function searchMessagesHandler(
     // This requires direct API calls or using a library that supports it.
     // Here we will construct the API request using context.client.rest
     const params = new URLSearchParams();
+    if (content) params.append('content', content);
     if (authorId) params.append('author_id', authorId);
     if (mentions) params.append('mentions', mentions);
     if (has) params.append('has', has);
