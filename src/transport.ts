@@ -214,6 +214,7 @@ export class StreamableHttpTransport implements MCPTransport {
                     case 'discord_create_category':
                     case 'discord_edit_category':
                     case 'discord_delete_category':
+                    case 'discord_list_servers':
                         // Check if client is logged in
                         if (!this.toolContext!.client.isReady()) {
                             error(`Client not ready for method ${method}, client state: ${JSON.stringify({
@@ -334,6 +335,9 @@ export class StreamableHttpTransport implements MCPTransport {
                                 break;
                             case 'discord_delete_category':
                                 result = await deleteCategoryHandler(params, this.toolContext!);
+                                break;
+                            case 'discord_list_servers':
+                                result = await listServersHandler(params, this.toolContext!);
                                 break;
                                 
                         }
@@ -498,6 +502,10 @@ export class StreamableHttpTransport implements MCPTransport {
                                 break;
                             case 'discord_delete_category':
                                 result = await deleteCategoryHandler(toolArgs, this.toolContext!);
+                                break;
+                            
+                            case 'discord_list_servers':
+                                result = await listServersHandler(toolArgs, this.toolContext!);
                                 break;
                                 
                             default:
