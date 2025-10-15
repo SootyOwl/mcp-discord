@@ -309,6 +309,7 @@ export const toolList = [
       type: "object",
       properties: {
         guildId: { type: "string", description: "The ID of the Discord server (guild) to search within" },
+        content: { type: "string", description: "Search for messages containing specific text" },
         authorId: { type: "string", description: "Filter messages by a specific user ID" },
         mentions: { type: "string", description: "Filter messages that mention a specific user ID" },
         has: { type: "string", description: "Filter messages that contain specific content types (e.g., link, embed, file, poll, image, video, sound, sticker, snapshot)" },

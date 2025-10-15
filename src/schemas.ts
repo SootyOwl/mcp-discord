@@ -136,6 +136,7 @@ export const ListServersSchema = z.object({});
 export const SearchMessagesSchema = z.object({
   guildId: z.string().min(1, "guildId is required"),
   // Optional filters
+  content: z.string().optional(),
   authorId: z.string().optional(),
   mentions: z.string().optional(),
   has: z.enum(['link','embed','file','poll','image','video','sound','sticker','snapshot']).optional(),
