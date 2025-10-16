@@ -326,5 +326,43 @@ export const toolList = [
       },
       required: ["guildId"]
     }
+  },
+  {
+    name: "discord_set_bot_status",
+    description: "Sets the bot's online status (online, idle, dnd, or invisible)",
+    inputSchema: {
+      type: "object",
+      properties: {
+        status: {
+          type: "string",
+          enum: ["online", "idle", "dnd", "invisible"],
+          description: "The status to set. Options: online (green), idle (yellow/away), dnd (red/do not disturb), invisible (appears offline)"
+        }
+      },
+      required: ["status"]
+    }
+  },
+  {
+    name: "discord_set_bot_activity",
+    description: "Sets the bot's activity/presence (what the bot is doing)",
+    inputSchema: {
+      type: "object",
+      properties: {
+        activityType: {
+          type: "string",
+          enum: ["playing", "streaming", "listening", "watching", "competing", "custom"],
+          description: "The type of activity"
+        },
+        activityName: {
+          type: "string",
+          description: "The name/description of the activity"
+        },
+        url: {
+          type: "string",
+          description: "Optional URL (only used for streaming activity type, must be a valid Twitch or YouTube URL)"
+        }
+      },
+      required: ["activityType", "activityName"]
+    }
   }
 ]; 

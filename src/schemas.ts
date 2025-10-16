@@ -135,19 +135,30 @@ export const DeleteWebhookSchema = z.object({
 export const ListServersSchema = z.object({});
 
 export const SearchMessagesSchema = z.object({
-  guildId: z.string().min(1, "guildId is required"),
-  // Optional filters
-  content: z.string().optional(),
-  authorId: z.string().optional(),
-  mentions: z.string().optional(),
-  has: z.enum(['link','embed','file','poll','image','video','sound','sticker','snapshot']).optional(),
-  maxId: z.string().optional(),
-  minId: z.string().optional(),
-  channelId: z.string().optional(),
-  pinned: z.boolean().optional(),
-  authorType: z.enum(['user','bot','webhook']).optional(),
-  sortBy: z.enum(['timestamp','relevance']).optional(),
-  sortOrder: z.enum(['desc','asc']).optional(),
-  limit: z.number().min(1).max(100).default(25).optional(),
-  offset: z.number().min(0).default(0).optional()
+    guildId: z.string().min(1, "guildId is required"),
+    // Optional filters
+    content: z.string().optional(),
+    authorId: z.string().optional(),
+    mentions: z.string().optional(),
+    has: z.enum(['link', 'embed', 'file', 'poll', 'image', 'video', 'sound', 'sticker', 'snapshot']).optional(),
+    maxId: z.string().optional(),
+    minId: z.string().optional(),
+    channelId: z.string().optional(),
+    pinned: z.boolean().optional(),
+    authorType: z.enum(['user', 'bot', 'webhook']).optional(),
+    sortBy: z.enum(['timestamp', 'relevance']).optional(),
+    sortOrder: z.enum(['desc', 'asc']).optional(),
+    limit: z.number().min(1).max(100).default(25).optional(),
+    offset: z.number().min(0).default(0).optional()
+});
+
+// Bot presence/status schemas
+export const SetBotStatusSchema = z.object({
+    status: z.enum(["online", "idle", "dnd", "invisible"])
+});
+
+export const SetBotActivitySchema = z.object({
+    activityType: z.enum(["playing", "streaming", "listening", "watching", "competing", "custom"]),
+    activityName: z.string(),
+    url: z.string().optional()
 });
