@@ -132,3 +132,14 @@ export const DeleteWebhookSchema = z.object({
 });
 
 export const ListServersSchema = z.object({});
+
+// Bot presence/status schemas
+export const SetBotStatusSchema = z.object({
+    status: z.enum(["online", "idle", "dnd", "invisible"])
+});
+
+export const SetBotActivitySchema = z.object({
+    activityType: z.enum(["playing", "streaming", "listening", "watching", "competing", "custom"]),
+    activityName: z.string(),
+    url: z.string().optional()
+});
