@@ -82,7 +82,7 @@ export const toolList = [
         forumChannelId: { type: "string" },
         title: { type: "string" },
         content: { type: "string" },
-        tags: { 
+        tags: {
           type: "array",
           items: { type: "string" }
         }
@@ -300,6 +300,30 @@ export const toolList = [
       type: "object",
       properties: {},
       required: []
+    }
+  },
+  {
+    name: "discord_search_messages",
+    description: "Searches for messages in a Discord server",
+    inputSchema: {
+      type: "object",
+      properties: {
+        guildId: { type: "string", description: "The ID of the Discord server (guild) to search within" },
+        content: { type: "string", description: "Search for messages containing specific text" },
+        authorId: { type: "string", description: "Filter messages by a specific user ID" },
+        mentions: { type: "string", description: "Filter messages that mention a specific user ID" },
+        has: { type: "string", description: "Filter messages that contain specific content types (e.g., link, embed, file, poll, image, video, sound, sticker, snapshot)", enum: ["link", "embed", "file", "poll", "image", "video", "sound", "sticker", "snapshot"] },
+        maxId: { type: "string", description: "Filter messages with IDs less than this value (messages before this ID)" },
+        minId: { type: "string", description: "Filter messages with IDs greater than this value (messages after this ID)" },
+        channelId: { type: "string", description: "Filter messages within a specific channel ID" },
+        pinned: { type: "boolean", description: "Filter messages based on whether they are pinned" },
+        authorType: { type: "string", description: "Filter messages by author type (user, bot, webhook)", enum: ["user", "bot", "webhook"] },
+        sortBy: { type: "string", description: "Sort results by 'timestamp' or 'relevance'", enum: ["timestamp", "relevance"] },
+        sortOrder: { type: "string", description: "Sort order: 'desc' for descending or 'asc' for ascending", enum: ["desc", "asc"] },
+        limit: { type: "number", description: "Maximum number of messages to return (default 25, max 100)" },
+        offset: { type: "number", description: "Number of messages to skip (for pagination)" }
+      },
+      required: ["guildId"]
     }
   }
 ]; 

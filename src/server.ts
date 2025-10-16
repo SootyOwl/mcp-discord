@@ -30,7 +30,8 @@ import {
   createCategoryHandler,
   editCategoryHandler,
   deleteCategoryHandler,
-  listServersHandler
+  listServersHandler,
+  searchMessagesHandler
 } from './tools/tools.js';
 import { MCPTransport } from './transport.js';
 import { info, error } from './logger.js';
@@ -182,6 +183,11 @@ export class DiscordMCPServer {
           case "discord_list_servers":
             this.logClientState("before discord_list_servers handler");
             toolResponse = await listServersHandler(args, this.toolContext);
+            return toolResponse;
+
+          case "discord_search_messages":
+            this.logClientState("before discord_search_messages handler");
+            toolResponse = await searchMessagesHandler(args, this.toolContext);
             return toolResponse;
 
           default:
