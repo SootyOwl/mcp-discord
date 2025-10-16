@@ -3,7 +3,7 @@ import { ToolHandler } from './types.js';
 import { handleDiscordError } from "../errorHandler.js";
 
 export const sendMessageHandler: ToolHandler = async (args, { client }) => {
-  const { channelId, message } = SendMessageSchema.parse(args);
+  const { channelId, message, replyToMessageId } = SendMessageSchema.parse(args);
   
   try {
     if (!client.isReady()) {
@@ -23,9 +23,41 @@ export const sendMessageHandler: ToolHandler = async (args, { client }) => {
 
     // Ensure channel is text-based and can send messages
     if ('send' in channel) {
-      await channel.send(message);
+      // Build message options
+      const messageOptions: any = {};
+      
+      // If replyToMessageId is provided, verify the message exists and add reply option
+      if (replyToMessageId) {
+        if ('messages' in channel) {
+          try {
+            // Verify the message exists
+            await channel.messages.fetch(replyToMessageId);
+            messageOptions.reply = { messageReference: replyToMessageId };
+          } catch (error) {
+            return {
+              content: [{ type: "text", text: `Cannot find message with ID: ${replyToMessageId} in channel ${channelId}` }],
+              isError: true
+            };
+          }
+        } else {
+          return {
+            content: [{ type: "text", text: `This channel type does not support message replies` }],
+            isError: true
+          };
+        }
+      }
+      
+      // Set the message content
+      messageOptions.content = message;
+      
+      await channel.send(messageOptions);
+      
+      const responseText = replyToMessageId 
+        ? `Message successfully sent to channel ID: ${channelId} as a reply to message ID: ${replyToMessageId}`
+        : `Message successfully sent to channel ID: ${channelId}`;
+      
       return {
-        content: [{ type: "text", text: `Message successfully sent to channel ID: ${channelId}` }]
+        content: [{ type: "text", text: responseText }]
       };
     } else {
       return {
