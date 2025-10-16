@@ -52,12 +52,13 @@ export const toolList = [
   },
   {
     name: "discord_send",
-    description: "Sends a message to a specified Discord text channel",
+    description: "Sends a message to a specified Discord text channel. Optionally reply to another message by providing its message ID.",
     inputSchema: {
       type: "object",
       properties: {
         channelId: { type: "string" },
-        message: { type: "string" }
+        message: { type: "string" },
+        replyToMessageId: { type: "string" }
       },
       required: ["channelId", "message"]
     }
