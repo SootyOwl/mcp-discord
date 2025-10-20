@@ -6,7 +6,8 @@ export const DiscordLoginSchema = z.object({
 
 export const SendMessageSchema = z.object({
     channelId: z.string(),
-    message: z.string()
+    message: z.string(),
+    replyToMessageId: z.string().optional()
 });
 
 export const GetForumChannelsSchema = z.object({
