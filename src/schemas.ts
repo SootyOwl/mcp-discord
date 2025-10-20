@@ -170,3 +170,18 @@ export const SetPresenceSchema = z.object({
         ).optional()
     }).optional()
 });
+
+export const SetNicknameSchema = z.object({
+    guildId: z.string({
+        description: "The ID of the server where to set the nickname."
+    }),
+    nickname: z.string({
+        description: "The nickname to set for the bot."
+    })
+});
+
+export const SetAboutMeSchema = z.object({
+    aboutMe: z.string({
+        description: "The 'About Me' section content to set."
+    })
+});

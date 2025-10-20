@@ -1,5 +1,4 @@
 import { Client } from "discord.js";
-import { z } from "zod";
 import { ToolResponse, ToolContext, ToolHandler } from "./types.js";
 import { loginHandler } from './login.js';
 import { sendMessageHandler } from './send-message.js';
@@ -37,6 +36,8 @@ import {
 } from './webhooks.js';
 import {
   setPresenceHandler,
+  setNicknameHandler,
+  setAboutMeHandler
 } from './presence.js';
 
 // Export tool handlers
@@ -65,7 +66,9 @@ export {
   deleteCategoryHandler,
   listServersHandler,
   searchMessagesHandler,
-  setPresenceHandler
+  setPresenceHandler,
+  setNicknameHandler,
+  setAboutMeHandler
 };
 
 // Export common types
