@@ -307,11 +307,7 @@ You can use Docker containers with both Claude and Cursor:
 
 ### Bot Status and Presence
 
-- `discord_set_bot_status`: Sets the bot's online status
-  - Options: `online` (green), `idle` (yellow/away), `dnd` (red/do not disturb), `invisible` (appears offline)
-- `discord_set_bot_activity`: Sets the bot's activity/presence (what the bot is doing)
-  - Activity types: `playing`, `streaming`, `listening`, `watching`, `competing`, `custom`
-  - For `streaming` type, a valid Twitch or YouTube URL can be provided
+- `discord_set_presence`: Sets the bot's presence (status) and activity status on Discord
 
 ## Development
 
