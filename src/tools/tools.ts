@@ -33,8 +33,7 @@ import {
   deleteWebhookHandler
 } from './webhooks.js';
 import {
-  setBotStatusHandler,
-  setBotActivityHandler
+  setBotPresenceHandler,
 } from './presence.js';
 
 // Export tool handlers
@@ -62,8 +61,7 @@ export {
   editCategoryHandler,
   deleteCategoryHandler,
   listServersHandler,
-  setBotStatusHandler,
-  setBotActivityHandler
+  setBotPresenceHandler as setPresenceHandler,
 };
 
 // Export common types

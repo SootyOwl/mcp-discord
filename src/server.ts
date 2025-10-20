@@ -31,8 +31,7 @@ import {
   editCategoryHandler,
   deleteCategoryHandler,
   listServersHandler,
-  setBotStatusHandler,
-  setBotActivityHandler
+  setPresenceHandler,
 } from './tools/tools.js';
 import { MCPTransport } from './transport.js';
 import { info, error } from './logger.js';
@@ -186,14 +185,9 @@ export class DiscordMCPServer {
             toolResponse = await listServersHandler(args, this.toolContext);
             return toolResponse;
 
-          case "discord_set_bot_status":
-            this.logClientState("before discord_set_bot_status handler");
-            toolResponse = await setBotStatusHandler(args, this.toolContext);
-            return toolResponse;
-
-          case "discord_set_bot_activity":
-            this.logClientState("before discord_set_bot_activity handler");
-            toolResponse = await setBotActivityHandler(args, this.toolContext);
+          case "discord_set_bot_presence":
+            this.logClientState("before discord_set_bot_presence handler");
+            toolResponse = await setPresenceHandler(args, this.toolContext);
             return toolResponse;
 
           default:

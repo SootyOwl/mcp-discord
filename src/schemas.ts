@@ -134,12 +134,20 @@ export const DeleteWebhookSchema = z.object({
 export const ListServersSchema = z.object({});
 
 // Bot presence/status schemas
-export const SetBotStatusSchema = z.object({
-    status: z.enum(["online", "idle", "dnd", "invisible"])
-});
-
-export const SetBotActivitySchema = z.object({
-    activityType: z.enum(["playing", "streaming", "listening", "watching", "competing", "custom"]),
-    activityName: z.string(),
-    url: z.string().optional()
+export const SetPresenceSchema = z.object({
+    status: z.enum(["online", "idle", "dnd", "invisible"], { description: "The presence status to set." }),
+    afk: z.boolean({
+        description: "Whether I am AFK.",
+    }).optional(),
+    activities: z.object({
+        type: z.enum(
+            ["PLAYING", "STREAMING", "LISTENING", "WATCHING", "COMPETING", "CUSTOM"],
+            { description: "The type of activity." }),
+        name: z.string(
+            { description: "The name of the activity." }
+        ),
+        url: z.string(
+            { description: "The URL for the activity (only for STREAMING type)." }
+        ).optional()
+    }).optional()
 });
