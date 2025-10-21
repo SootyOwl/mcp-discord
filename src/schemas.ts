@@ -186,3 +186,14 @@ export const SetAboutMeSchema = z.object({
     })
 });
 
+export const SetBioSchema = z.object({
+    guildId: z.string({
+        description: "The ID of the server where to set the bio."
+    }).min(1, "guildId is required"),
+    bio: z.string({
+        description: "The 'Bio' section content to set for the bot in the specified server."
+    }).optional()
+}, {
+    description: "Schema for setting the 'Bio' section in a specific server."
+});
+
