@@ -21,33 +21,29 @@ export function setLevel(level: Level) {
     return true;
 }
 
-export function log(server: Server, message: string, level: Level = 'info', extra?: Record<string, any>) {
+export async function log(server: Server, message: string, level: Level = 'info', extra?: Record<string, any>) {
     if (levelPriority[level] < levelPriority[currentLevel]) return;
-    try {
-        server.sendLoggingMessage(
-            {
-                level: level,
-                logger: 'mcp-discord',
-                data: {
-                    message: message,
-                    ...extra,
-                },
-            }
-        );
-        // Catch thrown errors to prevent logging failures from crashing the bot
-    } catch (e) {
+
+    await server.sendLoggingMessage({
+        level: level,
+        logger: 'mcp-discord',
+        data: {
+            message: message,
+            ...extra,
+        },
+    }).catch((e: any) => {
         console.error(`[ERROR] Failed to send log message to MCP server: ${e}`);
-    }
+    });
 }
 
-export function info(server: Server, message: string, extra?: Record<string, any>) {
-    log(server, message, 'info', extra);
+export async function info(server: Server, message: string, extra?: Record<string, any>) {
+    await log(server, message, 'info', extra);
 }
 
-export function warning(server: Server, message: string, extra?: Record<string, any>) {
-    log(server, message, 'warning', extra);
+export async function warning(server: Server, message: string, extra?: Record<string, any>) {
+    await log(server, message, 'warning', extra);
 }
 
-export function error(server: Server, message: string, extra?: Record<string, any>) {
-    log(server, message, 'error', extra);
+export async function error(server: Server, message: string, extra?: Record<string, any>) {
+    await log(server, message, 'error', extra);
 }
