@@ -69,7 +69,10 @@ function createMcpServer(client: Client) {
     // Register each tool on the MCP server
     for (const t of toolMap) {
         try {
-            server.tool(t.name, t.schema ? t.schema.shape ?? t.schema : undefined, async (args: any) => {
+            server.tool(
+                t.name, 
+                t.schema ? t.schema.description ?? '' : '',
+                t.schema ? t.schema.shape ?? t.schema : undefined, async (args: any) => {
                 // Handlers follow the signature: (args, context) => Promise<ToolResponse>
                 return await t.handler(args, toolContext);
             });
