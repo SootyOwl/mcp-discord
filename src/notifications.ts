@@ -1,4 +1,4 @@
-import { Server } from '@modelcontextprotocol/sdk/server'
+import { Server } from '@modelcontextprotocol/sdk/server';
 
 export type Level = 'debug' | 'info' | 'notice' | 'warning' | 'error' | 'critical' | 'alert' | 'emergency';
 
@@ -21,25 +21,33 @@ export function setLevel(level: Level) {
     return true;
 }
 
-export function log(server: Server, message: string, level: Level = 'info') {
+export function log(server: Server, message: string, level: Level = 'info', extra?: Record<string, any>) {
     if (levelPriority[level] < levelPriority[currentLevel]) return;
-    server.sendLoggingMessage(
-        {
-            level: level,
-            logger: 'mcp-discord',
-            data: { text: message },
-        }
-    );
+    try {
+        server.sendLoggingMessage(
+            {
+                level: level,
+                logger: 'mcp-discord',
+                data: {
+                    message: message,
+                    ...extra,
+                },
+            }
+        );
+        // Catch thrown errors to prevent logging failures from crashing the bot
+    } catch (e) {
+        console.error(`[ERROR] Failed to send log message to MCP server: ${e}`);
+    }
 }
 
-export function info(server: Server, message: string) {
-    log(server, message, 'info');
+export function info(server: Server, message: string, extra?: Record<string, any>) {
+    log(server, message, 'info', extra);
 }
 
-export function warning(server: Server, message: string) {
-    log(server, message, 'warning');
+export function warning(server: Server, message: string, extra?: Record<string, any>) {
+    log(server, message, 'warning', extra);
 }
 
-export function error(server: Server, message: string) {
-    log(server, message, 'error');
+export function error(server: Server, message: string, extra?: Record<string, any>) {
+    log(server, message, 'error', extra);
 }

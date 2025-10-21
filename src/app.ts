@@ -7,7 +7,7 @@ import { randomUUID } from 'crypto';
 import { Client, GatewayIntentBits } from 'discord.js';
 import { config as dotenvConfig } from 'dotenv';
 import express, { Request, Response } from 'express';
-import { info, Level, setLevel, warning } from './notifications.js';
+import { error, info, Level, setLevel, warning } from './notifications.js';
 import * as schemas from './schemas.js';
 import * as handlers from './tools/tools.js';
 import { createToolContext } from './tools/tools.js';
@@ -87,6 +87,20 @@ function createMcpServer(client: Client) {
         return {};
     });
 
+    // Autologin the Discord client if token is provided on server ready
+    server.server.oninitialized = () => {
+        if (client.token) {
+            info(server.server, 'Discord token provided, attempting login...');
+            client.login().then(() => {
+                info(server.server, `Discord client logged in as ${client.user?.tag}`);
+            }).catch(err => {
+                error(server.server, `Discord client login failed: ${String(err)}`);
+            });
+        } else {
+            warning(server.server, 'No Discord token provided, client not logged in.');
+        }
+    };
+
     return server;
 }
 
@@ -95,19 +109,6 @@ function createDiscordClient(token?: string) {
     const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
     if (token) {
         client.token = token;
-        // Auto-login on startup if token is available
-        (async () => {
-            try {
-                await client.login(token);
-                info((client as any).server, 'Successfully logged in to Discord');
-            } catch (err: any) {
-                if (typeof err.message === 'string' && err.message.includes('Privileged intent provided is not enabled or whitelisted')) {
-                    warning((client as any).server, 'Discord login failed due to missing privileged intents. Please enable the required intents in the Discord Developer Portal.');
-                } else {
-                    warning((client as any).server, 'Discord login failed: ' + String(err));
-                }
-            }
-        })();
     }
     let clientStatusInterval: NodeJS.Timeout | null = null;
 
@@ -116,14 +117,14 @@ function createDiscordClient(token?: string) {
         if (!(client as any).server || !(client as any).server.transport) {
             return;
         }
-        info((client as any).server, `Discord client state [${context}]: ${JSON.stringify({
+        info((client as any).server, `Discord client state [${context}]`, {
             isReady: client.isReady(),
             hasToken: !!client.token,
             user: client.user ? {
                 id: client.user.id,
                 tag: client.user.tag,
             } : null
-        })}`);
+        });
     }
     clientStatusInterval = setInterval(() => {
         logClientState("periodic check");
