@@ -21,14 +21,14 @@ export async function setPresenceHandler(
         isError: true
       };
     }
-    // Map activity type string to ActivityType enum
+    // Map activity type enum to ActivityType enum
     const activityTypeMap: Record<string, ActivityType> = {
-      "PLAYING": ActivityType.Playing,
-      "STREAMING": ActivityType.Streaming,
-      "LISTENING": ActivityType.Listening,
-      "WATCHING": ActivityType.Watching,
-      "COMPETING": ActivityType.Competing,
-      "CUSTOM": ActivityType.Custom
+      Playing: ActivityType.Playing,
+      Streaming: ActivityType.Streaming,
+      Listening: ActivityType.Listening,
+      Watching: ActivityType.Watching,
+      Competing: ActivityType.Competing,
+      Custom: ActivityType.Custom
     };
     // Set the bot's presence
     context.client.user?.setPresence({
@@ -43,9 +43,15 @@ export async function setPresenceHandler(
         : []
     });
 
-    return {
-      content: [{ type: "text", text: `Successfully set bot presence to: ${status}` }]
-    };
+    if (activities) {
+      return {
+        content: [{ type: "text", text: `Successfully set bot presence to: ${status} with activity: ${activities.type} - ${activities.name}` }]
+      };
+    } else {
+      return {
+        content: [{ type: "text", text: `Successfully set bot presence to: ${status} with no activity.` }]
+      };
+    }
   } catch (error) {
     return handleDiscordError(error);
   }
