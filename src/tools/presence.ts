@@ -78,7 +78,11 @@ export async function setNicknameHandler(
       };
     }
     // Set the bot's nickname
-    await member.setNickname(nickname);
+    if (nickname === undefined) {
+      await member.setNickname(null);
+    } else {
+      await member.setNickname(nickname);
+    }
 
     return {
       content: [{ type: "text", text: `Successfully set nickname to: ${nickname}` }]
