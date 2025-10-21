@@ -38,16 +38,18 @@ function createMcpServer(client: Client) {
     // Zod schemas from `schemas.ts` where available.
     const toolMap: Array<{ name: string; schema?: any; handler: any }> = [
         { name: 'discord_login', schema: schemas.DiscordLoginSchema, handler: handlers.loginHandler },
+        { name: 'discord_list_servers', schema: schemas.ListServersSchema, handler: handlers.listServersHandler },
         { name: 'discord_send', schema: schemas.SendMessageSchema, handler: handlers.sendMessageHandler },
+        { name: 'discord_get_server_info', schema: schemas.GetServerInfoSchema, handler: handlers.getServerInfoHandler },
+        { name: 'discord_create_text_channel', schema: schemas.CreateTextChannelSchema, handler: handlers.createTextChannelHandler },
+        { name: 'discord_delete_channel', schema: schemas.DeleteChannelSchema, handler: handlers.deleteChannelHandler },
         { name: 'discord_get_forum_channels', schema: schemas.GetForumChannelsSchema, handler: handlers.getForumChannelsHandler },
         { name: 'discord_create_forum_post', schema: schemas.CreateForumPostSchema, handler: handlers.createForumPostHandler },
         { name: 'discord_get_forum_post', schema: schemas.GetForumPostSchema, handler: handlers.getForumPostHandler },
         { name: 'discord_reply_to_forum', schema: schemas.ReplyToForumSchema, handler: handlers.replyToForumHandler },
         { name: 'discord_delete_forum_post', schema: schemas.DeleteForumPostSchema, handler: handlers.deleteForumPostHandler },
-        { name: 'discord_create_text_channel', schema: schemas.CreateTextChannelSchema, handler: handlers.createTextChannelHandler },
-        { name: 'discord_delete_channel', schema: schemas.DeleteChannelSchema, handler: handlers.deleteChannelHandler },
+        { name: 'discord_search_messages', schema: schemas.SearchMessagesSchema, handler: handlers.searchMessagesHandler },
         { name: 'discord_read_messages', schema: schemas.ReadMessagesSchema, handler: handlers.readMessagesHandler },
-        { name: 'discord_get_server_info', schema: schemas.GetServerInfoSchema, handler: handlers.getServerInfoHandler },
         { name: 'discord_add_reaction', schema: schemas.AddReactionSchema, handler: handlers.addReactionHandler },
         { name: 'discord_add_multiple_reactions', schema: schemas.AddMultipleReactionsSchema, handler: handlers.addMultipleReactionsHandler },
         { name: 'discord_remove_reaction', schema: schemas.RemoveReactionSchema, handler: handlers.removeReactionHandler },
@@ -56,10 +58,12 @@ function createMcpServer(client: Client) {
         { name: 'discord_send_webhook_message', schema: schemas.SendWebhookMessageSchema, handler: handlers.sendWebhookMessageHandler },
         { name: 'discord_edit_webhook', schema: schemas.EditWebhookSchema, handler: handlers.editWebhookHandler },
         { name: 'discord_delete_webhook', schema: schemas.DeleteWebhookSchema, handler: handlers.deleteWebhookHandler },
-        { name: 'discord_list_servers', schema: schemas.ListServersSchema, handler: handlers.listServersHandler },
         { name: 'discord_create_category', schema: schemas.CreateCategorySchema, handler: handlers.createCategoryHandler },
         { name: 'discord_edit_category', schema: schemas.EditCategorySchema, handler: handlers.editCategoryHandler },
         { name: 'discord_delete_category', schema: schemas.DeleteCategorySchema, handler: handlers.deleteCategoryHandler },
+        { name: 'discord_set_bio', schema: schemas.SetBioSchema, handler: handlers.setBioHandler },
+        { name: 'discord_set_nickname', schema: schemas.SetNicknameSchema, handler: handlers.setNicknameHandler },
+        { name: 'discord_set_presence', schema: schemas.SetPresenceSchema, handler: handlers.setPresenceHandler },
     ];
 
     // Register each tool on the MCP server
