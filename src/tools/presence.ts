@@ -55,7 +55,7 @@ export async function setNicknameHandler(
   args: unknown,
   context: ToolContext
 ): Promise<ToolResponse> {
-  const { guildId, nickname } = SetNicknameSchema.parse(args);
+  const { guildId, nickname: nick } = SetNicknameSchema.parse(args);
   try {
     if (!context.client.isReady()) {
       return {
@@ -70,22 +70,11 @@ export async function setNicknameHandler(
         isError: true
       };
     }
-    const member = await guild.members.fetch(context.client.user!.id);
-    if (!member) {
-      return {
-        content: [{ type: "text", text: `Bot is not a member of guild ${guildId}.` }],
-        isError: true
-      };
-    }
-    // Set the bot's nickname
-    if (nickname === undefined) {
-      await member.setNickname(null);
-    } else {
-      await member.setNickname(nickname);
-    }
+
+    await guild.members.editMe({ nick: nick ?? null, reason: "Updating bot nickname via tool" });
 
     return {
-      content: [{ type: "text", text: `Successfully set nickname to: ${nickname}` }]
+      content: [{ type: "text", text: `Successfully set nickname to: ${nick}` }]
     };
   } catch (error) {
     return handleDiscordError(error);
