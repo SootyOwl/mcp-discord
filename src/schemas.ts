@@ -206,19 +206,31 @@ export const SetPresenceSchema = z.object({
     afk: z.boolean({
         description: "Whether I am AFK.",
     }).optional(),
-    activities: z.object({
-        type: z.enum(
-            ["PLAYING", "STREAMING", "LISTENING", "WATCHING", "COMPETING", "CUSTOM"],
-            { description: "The type of activity." }),
-        name: z.string(
-            { description: "The name of the activity." }
-        ),
-        url: z.string(
-            { description: "The URL for the activity (only for STREAMING type)." }
-        ).optional()
+    activity_type: z.enum(["Playing", "Streaming", "Listening", "Watching", "Competing", "Custom"], {
+        description: "The type of activity to set.",
+    }).optional(),
+    activity_name: z.string({
+        description: "The name of the activity to set.",
     }).optional()
 }, {
     description: "Set the bot's presence/status."
+}).superRefine((val, ctx) => {
+    const hasType = val.activity_type !== undefined;
+    const hasName = val.activity_name !== undefined && val.activity_name !== "";
+    if (hasType && !hasName) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "activity_name is required when activity_type is provided",
+            path: ["activity_name"]
+        });
+    }
+    if (hasName && !hasType) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "activity_type is required when activity_name is provided",
+            path: ["activity_type"]
+        });
+    }
 });
 
 export const SetNicknameSchema = z.object({

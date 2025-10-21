@@ -13,7 +13,7 @@ export async function setPresenceHandler(
   args: unknown,
   context: ToolContext
 ): Promise<ToolResponse> {
-  const { status, afk, activities } = SetPresenceSchema.parse(args);
+  const { status, afk, activity_name, activity_type } = SetPresenceSchema.parse(args);
   try {
     if (!context.client.isReady()) {
       return {
@@ -21,7 +21,7 @@ export async function setPresenceHandler(
         isError: true
       };
     }
-    // Map activity type enum to ActivityType enum
+    // map activity_type string to ActivityType enum
     const activityTypeMap: Record<string, ActivityType> = {
       Playing: ActivityType.Playing,
       Streaming: ActivityType.Streaming,
@@ -30,22 +30,18 @@ export async function setPresenceHandler(
       Competing: ActivityType.Competing,
       Custom: ActivityType.Custom
     };
-    // Set the bot's presence
-    context.client.user?.setPresence({
+    context.client.user.setPresence({
       status: status as PresenceStatusData,
-      afk: afk ?? false,
-      activities: activities
-        ? [{
-          name: activities.name,
-          type: activityTypeMap[activities.type],
-          url: activities.url
-        }]
-        : []
+      afk: afk,
+      activities: activity_name && activity_type ? [{
+        name: activity_name,
+        type: activityTypeMap[activity_type]
+      }] : []
     });
 
-    if (activities) {
+    if (activity_name && activity_type) {
       return {
-        content: [{ type: "text", text: `Successfully set bot presence to: ${status} with activity: ${activities.type} - ${activities.name}` }]
+        content: [{ type: "text", text: `Successfully set bot presence to: ${status} with activity: ${activity_type} - ${activity_name}` }]
       };
     } else {
       return {
