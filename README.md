@@ -307,6 +307,8 @@ You can use Docker containers with both Claude and Cursor:
 
 ### Bot Status and Presence
 
+- `discord_set_bio`: Set or clear the bot's 'Bio' section in a specified server
+- `discord_set_nickname`: Set or clear the bot's nickname in a specified server
 - `discord_set_presence`: Sets the bot's presence (status) and activity status on Discord
 
 ## Development
