@@ -280,6 +280,9 @@ You can use Docker containers with both Claude and Cursor:
 
 - `discord_create_text_channel`: Create a text channel
 - `discord_delete_channel`: Delete a channel
+- `discord_create_category`: Create a channel category
+- `discord_edit_category`: Edit a channel category
+- `discord_delete_category`: Delete a channel category
 
 ### Forum Functions
 
