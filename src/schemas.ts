@@ -182,6 +182,7 @@ export const SetNicknameSchema = z.object({
 
 export const SetAboutMeSchema = z.object({
     aboutMe: z.string({
-        description: "The 'About Me' section content to set."
+        description: "The global 'About Me' section content."
     })
 });
+
