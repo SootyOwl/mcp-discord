@@ -214,23 +214,6 @@ export const SetPresenceSchema = z.object({
     }).optional()
 }, {
     description: "Set the bot's presence/status."
-}).superRefine((val, ctx) => {
-    const hasType = val.activity_type !== undefined;
-    const hasName = val.activity_name !== undefined && val.activity_name !== "";
-    if (hasType && !hasName) {
-        ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "activity_name is required when activity_type is provided",
-            path: ["activity_name"]
-        });
-    }
-    if (hasName && !hasType) {
-        ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "activity_type is required when activity_name is provided",
-            path: ["activity_type"]
-        });
-    }
 });
 
 export const SetNicknameSchema = z.object({
