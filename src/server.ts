@@ -33,6 +33,8 @@ import {
   listServersHandler,
   searchMessagesHandler,
   setPresenceHandler,
+  setNicknameHandler,
+  setBioHandler,
 } from './tools/tools.js';
 import { MCPTransport } from './transport.js';
 import { info, error } from './logger.js';
@@ -43,7 +45,7 @@ export class DiscordMCPServer {
   private clientStatusInterval: NodeJS.Timeout | null = null;
 
   constructor(
-    private client: Client, 
+    private client: Client,
     private transport: MCPTransport
   ) {
     this.server = new Server(
@@ -191,9 +193,19 @@ export class DiscordMCPServer {
             toolResponse = await searchMessagesHandler(args, this.toolContext);
             return toolResponse;
 
-          case "discord_set_bot_presence":
+          case "discord_set_presence":
             this.logClientState("before discord_set_bot_presence handler");
             toolResponse = await setPresenceHandler(args, this.toolContext);
+            return toolResponse;
+
+          case "discord_set_nickname":
+            this.logClientState("before discord_set_nickname handler");
+            toolResponse = await setNicknameHandler(args, this.toolContext);
+            return toolResponse;
+
+          case "discord_set_bio":
+            this.logClientState("before discord_set_bio handler");
+            toolResponse = await setBioHandler(args, this.toolContext);
             return toolResponse;
 
           default:
@@ -236,12 +248,12 @@ export class DiscordMCPServer {
     // Add client to server context so transport can access it
     (this.server as any)._context = { client: this.client };
     (this.server as any).client = this.client;
-    
+
     // Setup periodic client state logging
     this.clientStatusInterval = setInterval(() => {
       this.logClientState("periodic check");
     }, 10000);
-    
+
     await this.transport.start(this.server);
   }
 
@@ -251,7 +263,7 @@ export class DiscordMCPServer {
       clearInterval(this.clientStatusInterval);
       this.clientStatusInterval = null;
     }
-    
+
     await this.transport.stop();
   }
 } 

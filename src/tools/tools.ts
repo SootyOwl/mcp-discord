@@ -37,7 +37,8 @@ import {
 import {
   setPresenceHandler,
   setNicknameHandler,
-  setAboutMeHandler
+  setAboutMeHandler,
+  setBioHandler
 } from './presence.js';
 
 // Export tool handlers
@@ -68,7 +69,8 @@ export {
   searchMessagesHandler,
   setPresenceHandler,
   setNicknameHandler,
-  setAboutMeHandler
+  setAboutMeHandler,
+  setBioHandler
 };
 
 // Export common types
