@@ -1,11 +1,12 @@
-import { ToolContext, ToolResponse } from "./types.js";
-import {
-  SetPresenceSchema,
-  SetAboutMeSchema,
-  SetNicknameSchema
-} from "../schemas.js";
-import { handleDiscordError } from "../errorHandler.js";
 import { ActivityType, PresenceStatusData } from "discord.js";
+import { handleDiscordError } from "../errorHandler.js";
+import {
+  SetAboutMeSchema,
+  SetBioSchema,
+  SetNicknameSchema,
+  SetPresenceSchema
+} from "../schemas.js";
+import { ToolContext, ToolResponse } from "./types.js";
 
 // Set bot presence handler
 export async function setPresenceHandler(
@@ -55,7 +56,7 @@ export async function setNicknameHandler(
   args: unknown,
   context: ToolContext
 ): Promise<ToolResponse> {
-  const { guildId, nickname: nick } = SetNicknameSchema.parse(args);
+  const { guildId, nick } = SetNicknameSchema.parse(args);
   try {
     if (!context.client.isReady()) {
       return {
@@ -94,11 +95,39 @@ export async function setAboutMeHandler(
         isError: true
       };
     }
-    // Set the bot's about me (bio)
     await context.client.application.edit({ description: aboutMe });
 
     return {
       content: [{ type: "text", text: `Successfully updated about me section.` }]
+    };
+  } catch (error) {
+    return handleDiscordError(error);
+  }
+}
+
+export async function setBioHandler(
+  args: unknown,
+  context: ToolContext
+): Promise<ToolResponse> {
+  const { guildId, bio } = SetBioSchema.parse(args);
+  try {
+    if (!context.client.isReady()) {
+      return {
+        content: [{ type: "text", text: "Discord client not logged in." }],
+        isError: true
+      };
+    }
+    const guild = await context.client.guilds.fetch(guildId);
+    if (!guild) {
+      return {
+        content: [{ type: "text", text: `Guild with ID ${guildId} not found.` }],
+        isError: true
+      };
+    }
+    await guild.members.editMe({ bio: bio ?? null, reason: "Updating bot bio via tool" });
+
+    return {
+      content: [{ type: "text", text: `Successfully updated bio in guild ${guildId}.` }]
     };
   } catch (error) {
     return handleDiscordError(error);
