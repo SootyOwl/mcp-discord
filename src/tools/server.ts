@@ -47,7 +47,8 @@ export async function searchMessagesHandler(
     const response = await context.client.rest.get(`/guilds/${guildId}/messages/search?${params.toString()}`);
 
     return {
-      content: [{ type: "text", text: JSON.stringify(response, null, 2) }]
+      content: [{ type: "text", text: JSON.stringify(response, null, 2) }],
+      structuredContent: response
     };
   } catch (error) {
     return handleDiscordError(error);

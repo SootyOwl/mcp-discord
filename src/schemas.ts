@@ -183,19 +183,19 @@ export const ListServersSchema = z.object({}, {
 export const SearchMessagesSchema = z.object({
     guildId: z.string({ description: "The ID of the server (guild) to search in." }).min(1, "guildId is required"),
     // Optional filters
-    content: z.string({ description: "Search for messages that contain this text." }).optional(),
-    authorId: z.string({ description: "Filter messages to those authored by this user ID." }).optional(),
-    mentions: z.string({ description: "Filter messages that mention a specific user or role ID." }).optional(),
-    has: z.enum(['link', 'embed', 'file', 'poll', 'image', 'video', 'sound', 'sticker', 'snapshot'], { description: "Filter messages that contain a specific type of content." }).optional(),
-    maxId: z.string({ description: "Only include messages with IDs less than or equal to this (pagination)." }).optional(),
-    minId: z.string({ description: "Only include messages with IDs greater than or equal to this (pagination)." }).optional(),
-    channelId: z.string({ description: "If provided, restrict search to a specific channel ID." }).optional(),
-    pinned: z.boolean({ description: "If true, only include pinned messages; if false, only include unpinned; if omitted, include both." }).optional(),
-    authorType: z.enum(['user', 'bot', 'webhook'], { description: "Filter by the type of author (user, bot, or webhook)." }).optional(),
-    sortBy: z.enum(['timestamp', 'relevance'], { description: "Field to sort search results by." }).optional(),
-    sortOrder: z.enum(['desc', 'asc'], { description: "Sort direction for results." }).optional(),
-    limit: z.number({ description: "Number of results to return (1-100)." }).min(1).max(100).default(25).optional(),
-    offset: z.number({ description: "Number of results to skip (for pagination)." }).min(0).default(0).optional()
+    content: z.string({ description: "Search for messages that contain this text." }).optional().nullable(),
+    authorId: z.string({ description: "Filter messages to those authored by this user ID." }).optional().nullable(),
+    mentions: z.string({ description: "Filter messages that mention a specific user or role ID." }).optional().nullable(),
+    has: z.enum(['link', 'embed', 'file', 'poll', 'image', 'video', 'sound', 'sticker', 'snapshot'], { description: "Filter messages that contain a specific type of content." }).optional().nullable(),
+    maxId: z.string({ description: "Only include messages with IDs less than or equal to this (pagination)." }).optional().nullable(),
+    minId: z.string({ description: "Only include messages with IDs greater than or equal to this (pagination)." }).optional().nullable(),
+    channelId: z.string({ description: "If provided, restrict search to a specific channel ID." }).optional().nullable(),
+    pinned: z.boolean({ description: "If true, only include pinned messages; if false, only include unpinned; if omitted, include both." }).optional().nullable(),
+    authorType: z.enum(['user', 'bot', 'webhook'], { description: "Filter by the type of author (user, bot, or webhook)." }).optional().nullable(),
+    sortBy: z.enum(['timestamp', 'relevance'], { description: "Field to sort search results by." }).optional().nullable(),
+    sortOrder: z.enum(['desc', 'asc'], { description: "Sort direction for results." }).optional().nullable(),
+    limit: z.number({ description: "Number of results to return (1-25)." }).min(1).max(25).default(25).optional().nullable(),
+    offset: z.number({ description: "Number of results to skip (for pagination)." }).min(0).default(0).optional().nullable()
 }, {
     description: "Search messages in a server with various filters."
 });
