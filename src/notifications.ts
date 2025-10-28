@@ -32,7 +32,7 @@ export async function log(server: Server, message: string, level: Level = 'info'
             ...extra,
         },
     }).catch((e: any) => {
-        console.error(`[ERROR] Failed to send log message to MCP server: ${e}`);
+        console.error(`[ERROR] Failed to send log message to MCP server: ${e}, original message: ${message}`);
     });
 }
 
