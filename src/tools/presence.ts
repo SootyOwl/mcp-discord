@@ -38,6 +38,25 @@ export async function setPresenceHandler(
         type: activityTypeMap[activity_type]
       }] : []
     });
+    const presence = context.client.user.presence;
+    // Verify that the presence was set correctly
+    if (presence.activities.length > 0) {
+      if (activity_name && activity_type) {
+        const activity = presence.activities.find(act => act.name === activity_name && act.type === activityTypeMap[activity_type]);
+        if (!activity) {
+          return {
+            content: [{ type: "text", text: `Failed to set activity to: ${activity_type} - ${activity_name}, current activity is: ${presence.activities[0]?.name} - ${presence.activities[0]?.type}` }],
+            isError: true
+          };
+        }
+      }
+    }
+    if (presence.status !== status) {
+      return {
+        content: [{ type: "text", text: `Failed to set status to: ${status}, current status is: ${presence.status}` }],
+        isError: true
+      };
+    }
 
     if (activity_name && activity_type) {
       return {
