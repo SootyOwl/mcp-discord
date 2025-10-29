@@ -1,247 +1,247 @@
 import { z } from "zod";
 
 export const DiscordLoginSchema = z.object({
-    token: z.string({ description: "The bot token to use for login." }).optional()
+    token: z.string({ description: "Bot token for login." }).optional()
 }, {
-    description: "Login to Discord using a bot token. If no token is provided, the bot will attempt to use the token from the environment variable DISCORD_TOKEN."
+    description: "Login to Discord. Uses DISCORD_TOKEN env var if token not provided."
 });
 
 export const SendMessageSchema = z.object({
-    channelId: z.string({ description: "The ID of the channel to send the message to." }),
-    message: z.string({ description: "The content of the message to send." }),
-    replyToMessageId: z.string({ description: "The ID of the message to reply to, if any." }).optional()
+    channelId: z.string({ description: "Channel ID to send message to." }),
+    message: z.string({ description: "Message content." }),
+    replyToMessageId: z.string({ description: "Message ID to reply to." }).optional()
 }, {
-    description: "Send a message to a specified channel, optionally as a reply to another message."
+    description: "Send message to channel, optionally as reply."
 });
 
 export const GetForumChannelsSchema = z.object({
-    guildId: z.string({ description: "The ID of the server (guild) to get forum channels from." })
+    guildId: z.string({ description: "Server ID to get forum channels from." })
 }, {
-    description: "Get all forum channels in a specified server (guild)."
+    description: "Get all forum channels in server."
 });
 
 export const CreateForumPostSchema = z.object({
-    forumChannelId: z.string({ description: "The ID of the forum channel where the thread will be created." }),
-    title: z.string({ description: "The title of the forum post (thread)." }),
-    content: z.string({ description: "The body content of the forum post." }),
-    tags: z.array(z.string({ description: "A tag to attach to the forum post." })).optional()
+    forumChannelId: z.string({ description: "Forum channel ID to create thread in." }),
+    title: z.string({ description: "Forum post title." }),
+    content: z.string({ description: "Forum post content." }),
+    tags: z.array(z.string({ description: "Tag to attach." })).optional()
 }, {
-    description: "Create a new forum post (thread) in a specified forum channel."
+    description: "Create forum post thread in forum channel."
 });
 
 export const GetForumPostSchema = z.object({
-    threadId: z.string({ description: "The ID of the forum thread to retrieve." })
+    threadId: z.string({ description: "Forum thread ID." })
 }, {
-    description: "Get details of a specific forum post (thread) by its ID."
+    description: "Get forum post details by ID."
 });
 
 export const ReplyToForumSchema = z.object({
-    threadId: z.string({ description: "The ID of the forum thread to reply to." }),
-    message: z.string({ description: "The content of the reply message." })
+    threadId: z.string({ description: "Forum thread ID to reply to." }),
+    message: z.string({ description: "Reply content." })
 }, {
-    description: "Reply to a specific forum post (thread) by its ID."
+    description: "Reply to forum post by ID."
 });
 
 export const CreateTextChannelSchema = z.object({
-    guildId: z.string({ description: "The ID of the server (guild) where the text channel will be created." }),
-    channelName: z.string({ description: "The name for the new text channel." }),
-    topic: z.string({ description: "The (optional) topic/description for the channel." }).optional(),
-    reason: z.string({ description: "Optional reason for audit logs when creating the channel." }).optional()
+    guildId: z.string({ description: "Server ID to create channel in." }),
+    channelName: z.string({ description: "Channel name." }),
+    topic: z.string({ description: "Channel topic/description." }).optional(),
+    reason: z.string({ description: "Audit log reason." }).optional()
 }, {
-    description: "Create a new text channel in a specified server (guild)."
+    description: "Create text channel in server."
 });
 
 // Category schemas
 export const CreateCategorySchema = z.object({
-    guildId: z.string({ description: "The ID of the server (guild) where the category will be created." }),
-    name: z.string({ description: "The name of the category to create." }),
-    position: z.number({ description: "Optional sorting position index for the category." }).optional(),
-    reason: z.string({ description: "Optional reason for audit logs when creating the category." }).optional()
+    guildId: z.string({ description: "Server ID to create category in." }),
+    name: z.string({ description: "Category name." }),
+    position: z.number({ description: "Sorting position index." }).optional(),
+    reason: z.string({ description: "Audit log reason." }).optional()
 }, {
-    description: "Create a new category in a specified server (guild)."
+    description: "Create category in server."
 });
 
 export const EditCategorySchema = z.object({
-    categoryId: z.string({ description: "The ID of the category to edit." }),
-    name: z.string({ description: "New name for the category (optional)." }).optional(),
-    position: z.number({ description: "New position index for the category (optional)." }).optional(),
-    reason: z.string({ description: "Optional reason for audit logs when editing the category." }).optional()
+    categoryId: z.string({ description: "Category ID to edit." }),
+    name: z.string({ description: "New category name." }).optional(),
+    position: z.number({ description: "New position index." }).optional(),
+    reason: z.string({ description: "Audit log reason." }).optional()
 }, {
-    description: "Edit an existing category's properties."
+    description: "Edit category properties."
 });
 
 export const DeleteCategorySchema = z.object({
-    categoryId: z.string({ description: "The ID of the category to delete." }),
-    reason: z.string({ description: "Optional reason for audit logs when deleting the category." }).optional()
+    categoryId: z.string({ description: "Category ID to delete." }),
+    reason: z.string({ description: "Audit log reason." }).optional()
 }, {
-    description: "Delete a category by its ID."
+    description: "Delete category by ID."
 });
 
 export const DeleteChannelSchema = z.object({
-    channelId: z.string({ description: "The ID of the channel to delete." }),
-    reason: z.string({ description: "Optional reason for audit logs when deleting the channel." }).optional()
+    channelId: z.string({ description: "Channel ID to delete." }),
+    reason: z.string({ description: "Audit log reason." }).optional()
 }, {
-    description: "Delete a channel by its ID."
+    description: "Delete channel by ID."
 });
 
 export const ReadMessagesSchema = z.object({
-    channelId: z.string({ description: "The ID of the channel to read messages from." }),
-    limit: z.number({ description: "How many recent messages to fetch (1-100)." }).min(1).max(100).optional().default(50)
+    channelId: z.string({ description: "Channel ID to read from." }),
+    limit: z.number({ description: "Number of recent messages to fetch (1-100)." }).min(1).max(100).optional().default(50)
 }, {
-    description: "Read recent messages from a specified channel."
+    description: "Read recent messages from channel."
 });
 
 export const GetServerInfoSchema = z.object({
-    guildId: z.string({ description: "The ID of the server (guild) to get information for." })
+    guildId: z.string({ description: "Server ID to get info for." })
 }, {
-    description: "Get information about a specific server (guild) by its ID."
+    description: "Get server info by ID."
 });
 
 export const AddReactionSchema = z.object({
-    channelId: z.string({ description: "The ID of the channel containing the message to react to." }),
-    messageId: z.string({ description: "The ID of the message to add a reaction to." }),
-    emoji: z.string({ description: "The emoji to use for the reaction (unicode or custom)." })
+    channelId: z.string({ description: "Channel ID containing message." }),
+    messageId: z.string({ description: "Message ID to react to." }),
+    emoji: z.string({ description: "Emoji for reaction (unicode or custom)." })
 }, {
-    description: "Add a reaction to a specific message in a channel."
+    description: "Add reaction to message."
 });
 
 export const AddMultipleReactionsSchema = z.object({
-    channelId: z.string({ description: "The ID of the channel containing the message to react to." }),
-    messageId: z.string({ description: "The ID of the message to add reactions to." }),
-    emojis: z.array(z.string({ description: "An emoji to add (unicode or custom)." }))
+    channelId: z.string({ description: "Channel ID containing message." }),
+    messageId: z.string({ description: "Message ID to react to." }),
+    emojis: z.array(z.string({ description: "Emoji to add (unicode or custom)." }))
 }, {
-    description: "Add multiple reactions to a specific message in a channel."
+    description: "Add multiple reactions to message."
 });
 
 export const RemoveReactionSchema = z.object({
-    channelId: z.string({ description: "The ID of the channel containing the message to modify reactions on." }),
-    messageId: z.string({ description: "The ID of the message to remove the reaction from." }),
-    emoji: z.string({ description: "The emoji reaction to remove." }),
-    userId: z.string({ description: "Optional ID of the user whose reaction should be removed; if omitted, removes the current bot's reaction." }).optional()
+    channelId: z.string({ description: "Channel ID containing message." }),
+    messageId: z.string({ description: "Message ID to remove reaction from." }),
+    emoji: z.string({ description: "Emoji reaction to remove." }),
+    userId: z.string({ description: "User ID whose reaction to remove; omit for bot's own reaction." }).optional()
 }, {
-    description: "Remove a reaction from a specific message in a channel."
+    description: "Remove reaction from message."
 });
 
 export const DeleteForumPostSchema = z.object({
-    threadId: z.string({ description: "The ID of the forum thread to delete." }),
-    reason: z.string({ description: "Optional reason for audit logs when deleting the forum post." }).optional()
+    threadId: z.string({ description: "Forum thread ID to delete." }),
+    reason: z.string({ description: "Audit log reason." }).optional()
 }, {
-    description: "Delete a forum post (thread) by its ID."
+    description: "Delete forum post by ID."
 });
 
 export const DeleteMessageSchema = z.object({
-    channelId: z.string({ description: "The ID of the channel containing the message to delete." }),
-    messageId: z.string({ description: "The ID of the message to delete." }),
-    reason: z.string({ description: "Optional reason for audit logs when deleting the message." }).optional()
+    channelId: z.string({ description: "Channel ID containing message." }),
+    messageId: z.string({ description: "Message ID to delete." }),
+    reason: z.string({ description: "Audit log reason." }).optional()
 }, {
-    description: "Delete a message by its ID in a specified channel."
+    description: "Delete message by ID."
 });
 
 export const CreateWebhookSchema = z.object({
-    channelId: z.string({ description: "The ID of the channel to create the webhook in." }),
-    name: z.string({ description: "The name to assign to the webhook." }),
-    avatar: z.string({ description: "Optional avatar URL or data for the webhook." }).optional(),
-    reason: z.string({ description: "Optional reason for audit logs when creating the webhook." }).optional()
+    channelId: z.string({ description: "Channel ID to create webhook in." }),
+    name: z.string({ description: "Webhook name." }),
+    avatar: z.string({ description: "Avatar URL or data." }).optional(),
+    reason: z.string({ description: "Audit log reason." }).optional()
 }, {
-    description: "Create a webhook in a specified channel."
+    description: "Create webhook in channel."
 });
 
 export const SendWebhookMessageSchema = z.object({
-    webhookId: z.string({ description: "The ID of the webhook to send the message with." }),
-    webhookToken: z.string({ description: "The token for the webhook (used for authentication)." }),
-    content: z.string({ description: "The message content to send via the webhook." }),
-    username: z.string({ description: "Optional username to display for the webhook message." }).optional(),
-    avatarURL: z.string({ description: "Optional avatar URL to display for the webhook message." }).optional(),
-    threadId: z.string({ description: "Optional ID of the thread to post the webhook message into." }).optional()
+    webhookId: z.string({ description: "Webhook ID." }),
+    webhookToken: z.string({ description: "Webhook token for authentication." }),
+    content: z.string({ description: "Message content." }),
+    username: z.string({ description: "Display username." }).optional(),
+    avatarURL: z.string({ description: "Display avatar URL." }).optional(),
+    threadId: z.string({ description: "Thread ID to post in." }).optional()
 }, {
-    description: "Send a message using a webhook."
+    description: "Send message via webhook."
 });
 
 export const EditWebhookSchema = z.object({
-    webhookId: z.string({ description: "The ID of the webhook to edit." }),
-    webhookToken: z.string({ description: "Optional token for the webhook if required to authorize edits." }).optional(),
-    name: z.string({ description: "Optional new name for the webhook." }).optional(),
-    avatar: z.string({ description: "Optional new avatar URL or data for the webhook." }).optional(),
-    channelId: z.string({ description: "Optional channel ID to move the webhook to." }).optional(),
-    reason: z.string({ description: "Optional reason for audit logs when editing the webhook." }).optional()
+    webhookId: z.string({ description: "Webhook ID to edit." }),
+    webhookToken: z.string({ description: "Webhook token for authorization." }).optional(),
+    name: z.string({ description: "New webhook name." }).optional(),
+    avatar: z.string({ description: "New avatar URL or data." }).optional(),
+    channelId: z.string({ description: "Channel ID to move webhook to." }).optional(),
+    reason: z.string({ description: "Audit log reason." }).optional()
 }, {
-    description: "Edit a webhook's properties."
+    description: "Edit webhook properties."
 });
 
 export const DeleteWebhookSchema = z.object({
-    webhookId: z.string({ description: "The ID of the webhook to delete." }),
-    webhookToken: z.string({ description: "Optional token for the webhook if required for deletion." }).optional(),
-    reason: z.string({ description: "Optional reason for audit logs when deleting the webhook." }).optional()
+    webhookId: z.string({ description: "Webhook ID to delete." }),
+    webhookToken: z.string({ description: "Webhook token for authorization." }).optional(),
+    reason: z.string({ description: "Audit log reason." }).optional()
 }, {
-    description: "Delete a webhook by its ID and token."
+    description: "Delete webhook by ID."
 });
 
 export const ListServersSchema = z.object({}, {
-    description: "List all servers (guilds) the bot is a member of."
+    description: "List all servers bot is member of."
 });
 
 export const SearchMessagesSchema = z.object({
-    guildId: z.string({ description: "The ID of the server (guild) to search in." }).min(1, "guildId is required"),
+    guildId: z.string({ description: "Server ID to search in." }).min(1, "guildId is required"),
     // Optional filters
-    content: z.string({ description: "Search for messages that contain this text." }).optional().nullable(),
-    authorId: z.string({ description: "Filter messages to those authored by this user ID." }).optional().nullable(),
-    mentions: z.string({ description: "Filter messages that mention a specific user or role ID." }).optional().nullable(),
-    has: z.enum(['link', 'embed', 'file', 'poll', 'image', 'video', 'sound', 'sticker', 'snapshot'], { description: "Filter messages that contain a specific type of content." }).optional().nullable(),
-    maxId: z.string({ description: "Only include messages with IDs less than or equal to this (pagination)." }).optional().nullable(),
-    minId: z.string({ description: "Only include messages with IDs greater than or equal to this (pagination)." }).optional().nullable(),
-    channelId: z.string({ description: "If provided, restrict search to a specific channel ID." }).optional().nullable(),
-    pinned: z.boolean({ description: "If true, only include pinned messages; if false, only include unpinned; if omitted, include both." }).optional().nullable(),
-    authorType: z.enum(['user', 'bot', 'webhook'], { description: "Filter by the type of author (user, bot, or webhook)." }).optional().nullable(),
-    sortBy: z.enum(['timestamp', 'relevance'], { description: "Field to sort search results by." }).optional().nullable(),
-    sortOrder: z.enum(['desc', 'asc'], { description: "Sort direction for results." }).optional().nullable(),
-    limit: z.number({ description: "Number of results to return (1-25)." }).min(1).max(25).default(25).optional().nullable(),
-    offset: z.number({ description: "Number of results to skip (for pagination)." }).min(0).default(0).optional().nullable()
+    content: z.string({ description: "Text to search for in messages." }).optional().nullable(),
+    authorId: z.string({ description: "Filter by author user ID." }).optional().nullable(),
+    mentions: z.string({ description: "Filter by mentioned user or role ID." }).optional().nullable(),
+    has: z.enum(['link', 'embed', 'file', 'poll', 'image', 'video', 'sound', 'sticker', 'snapshot'], { description: "Filter by content type." }).optional().nullable(),
+    maxId: z.string({ description: "Max message ID (pagination)." }).optional().nullable(),
+    minId: z.string({ description: "Min message ID (pagination)." }).optional().nullable(),
+    channelId: z.string({ description: "Restrict to specific channel ID." }).optional().nullable(),
+    pinned: z.boolean({ description: "Filter by pinned status (true/false/omit for both)." }).optional().nullable(),
+    authorType: z.enum(['user', 'bot', 'webhook'], { description: "Filter by author type." }).optional().nullable(),
+    sortBy: z.enum(['timestamp', 'relevance'], { description: "Sort field." }).optional().nullable(),
+    sortOrder: z.enum(['desc', 'asc'], { description: "Sort direction." }).optional().nullable(),
+    limit: z.number({ description: "Results to return (1-25)." }).min(1).max(25).default(25).optional().nullable(),
+    offset: z.number({ description: "Results to skip (pagination)." }).min(0).default(0).optional().nullable()
 }, {
-    description: "Search messages in a server with various filters."
+    description: "Search messages in server with filters."
 });
 
 // Bot presence/status schemas
 export const SetPresenceSchema = z.object({
-    status: z.enum(["online", "idle", "dnd", "invisible"], { description: "The presence status to set." }),
+    status: z.enum(["online", "idle", "dnd", "invisible"], { description: "Presence status." }),
     afk: z.boolean({
-        description: "Whether I am AFK.",
+        description: "AFK status.",
     }).optional(),
     activity_type: z.enum(["Playing", "Streaming", "Listening", "Watching", "Competing", "Custom"], {
-        description: "The type of activity to set.",
+        description: "Activity type.",
     }).optional(),
     activity_name: z.string({
-        description: "The name of the activity to set.",
+        description: "Activity name.",
     }).optional()
 }, {
-    description: "Set the bot's presence/status."
+    description: "Set bot presence/status."
 });
 
 export const SetNicknameSchema = z.object({
     guildId: z.string({
-        description: "The ID of the server where to set the nickname."
+        description: "Server ID to set nickname in."
     }).min(1, "guildId is required"),
     nick: z.string({
-        description: "The nickname to set (leave empty to reset)."
+        description: "Nickname (empty to reset)."
     }).optional()
 }, {
-    description: "Set the bot's nickname in a specific server."
+    description: "Set bot nickname in server."
 });
 
 export const SetAboutMeSchema = z.object({
     aboutMe: z.string({
-        description: "The global 'About Me' section content."
+        description: "Global 'About Me' content."
     })
 }, {
-    description: "Set the global 'About Me' section for the bot."
+    description: "Set bot global 'About Me' section."
 });
 
 export const SetBioSchema = z.object({
     guildId: z.string({
-        description: "The ID of the server where to set the bio."
+        description: "Server ID to set bio in."
     }).min(1, "guildId is required"),
     bio: z.string({
-        description: "The 'Bio' section content to set for the bot in the specified server."
+        description: "'Bio' section content."
     }).optional()
 }, {
-    description: "Set the 'Bio' section in a specific server."
+    description: "Set bot 'Bio' in server."
 });
