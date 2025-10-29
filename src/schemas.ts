@@ -86,7 +86,7 @@ export const DeleteChannelSchema = z.object({
 
 export const ReadMessagesSchema = z.object({
     channelId: z.string({ description: "Channel ID to read from." }),
-    limit: z.number({ description: "Number of recent messages to fetch (1-100)." }).min(1).max(100).optional().default(50)
+    limit: z.number({ description: "Number of recent messages to fetch (1-100)." }).min(1).max(100).default(5).optional()
 }, {
     description: "Read recent messages from channel."
 });
