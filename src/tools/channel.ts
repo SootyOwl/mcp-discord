@@ -232,7 +232,7 @@ export async function readMessagesHandler(
     // Format messages
     const formattedMessages = messages.map(msg => ({
       id: msg.id,
-      content: msg.content,
+      content: msg.cleanContent,
       author: {
         id: msg.author.id,
         username: msg.author.username,
