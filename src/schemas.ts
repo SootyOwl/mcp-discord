@@ -195,7 +195,7 @@ export const SearchMessagesSchema = z.object({
     sortBy: z.enum(['timestamp', 'relevance', ''], { description: "Sort field." }).optional(),
     sortOrder: z.enum(['desc', 'asc', ''], { description: "Sort direction." }).optional(),
     limit: z.number({ description: "Results to return (1-25)." }).min(1).max(25).default(10).optional(),
-    offset: z.number({ description: "Results to skip (pagination)." }).min(0).default(0).optional().nullable()
+    offset: z.number({ description: "Results to skip (pagination)." }).min(0).default(0).optional()
 }, {
     description: "Search messages in server with filters."
 });
