@@ -1,15 +1,14 @@
-import { z } from "zod";
 import { ChannelType } from "discord.js";
-import { ToolContext, ToolResponse } from "./types.js";
-import {
-  CreateTextChannelSchema, 
-  DeleteChannelSchema, 
-  ReadMessagesSchema,
-  CreateCategorySchema,
-  EditCategorySchema,
-  DeleteCategorySchema
-} from "../schemas.js";
 import { handleDiscordError } from "../errorHandler.js";
+import {
+  CreateCategorySchema,
+  CreateTextChannelSchema,
+  DeleteCategorySchema,
+  DeleteChannelSchema,
+  EditCategorySchema,
+  ReadMessagesSchema
+} from "../schemas.js";
+import { ToolContext, ToolResponse } from "./types.js";
 
 // Category creation handler
 export async function createCategoryHandler(
