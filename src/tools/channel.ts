@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { ChannelType } from "discord.js";
 import { ToolContext, ToolResponse } from "./types.js";
-import { 
+import {
   CreateTextChannelSchema, 
   DeleteChannelSchema, 
   ReadMessagesSchema,
@@ -11,7 +11,7 @@ import {
 } from "../schemas.js";
 import { handleDiscordError } from "../errorHandler.js";
 
-  // Category creation handler
+// Category creation handler
 export async function createCategoryHandler(
   args: unknown,
   context: ToolContext
@@ -105,9 +105,9 @@ export async function deleteCategoryHandler(
   }
 }
 
-  // Text channel creation handler
+// Text channel creation handler
 export async function createTextChannelHandler(
-  args: unknown, 
+  args: unknown,
   context: ToolContext
 ): Promise<ToolResponse> {
   const { guildId, channelName, topic, reason } = CreateTextChannelSchema.parse(args);
@@ -137,9 +137,9 @@ export async function createTextChannelHandler(
     const channel = await guild.channels.create(channelOptions);
 
     return {
-      content: [{ 
-        type: "text", 
-        text: `Successfully created text channel "${channelName}" with ID: ${channel.id}` 
+      content: [{
+        type: "text",
+        text: `Successfully created text channel "${channelName}" with ID: ${channel.id}`
       }]
     };
   } catch (error) {
@@ -149,7 +149,7 @@ export async function createTextChannelHandler(
 
 // Channel deletion handler
 export async function deleteChannelHandler(
-  args: unknown, 
+  args: unknown,
   context: ToolContext
 ): Promise<ToolResponse> {
   const { channelId, reason } = DeleteChannelSchema.parse(args);
@@ -181,9 +181,9 @@ export async function deleteChannelHandler(
     await channel.delete(reason || "Channel deleted via API");
 
     return {
-      content: [{ 
-        type: "text", 
-        text: `Successfully deleted channel with ID: ${channelId}` 
+      content: [{
+        type: "text",
+        text: `Successfully deleted channel with ID: ${channelId}`
       }]
     };
   } catch (error) {
@@ -193,7 +193,7 @@ export async function deleteChannelHandler(
 
 // Message reading handler
 export async function readMessagesHandler(
-  args: unknown, 
+  args: unknown,
   context: ToolContext
 ): Promise<ToolResponse> {
   const { channelId, limit } = ReadMessagesSchema.parse(args);
@@ -223,14 +223,14 @@ export async function readMessagesHandler(
 
     // Fetch messages
     const messages = await channel.messages.fetch({ limit });
-    
+
     if (messages.size === 0) {
       return {
         content: [{ type: "text", text: `No messages found in channel` }]
       };
     }
 
-    // Format messages 
+    // Format messages
     const formattedMessages = messages.map(msg => ({
       id: msg.id,
       content: msg.content,
@@ -240,20 +240,35 @@ export async function readMessagesHandler(
         bot: msg.author.bot
       },
       timestamp: msg.createdAt,
-      attachments: msg.attachments.size,
-      embeds: msg.embeds.length,
+      attachments: msg.attachments.map(att => ({
+        filename: att.name,
+        contentType: att.contentType,
+        url: att.url
+      })),
+      embeds: msg.embeds.map(embed => ({
+        title: embed.data.title,
+        description: embed.data.description,
+        url: embed.data.url,
+        image: embed.data.image ? embed.data.image.url : undefined,
+        author: embed.data.author ? {
+          name: embed.data.author.name,
+          url: embed.data.author.url
+        } : undefined,
+        fields: embed.data.fields
+      })),
       replyTo: msg.reference ? msg.reference.messageId : null
     })).sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
 
     return {
-      content: [{ 
-        type: "text", 
+      content: [{
+        type: "text",
         text: JSON.stringify({
           channelId,
           messageCount: formattedMessages.length,
           messages: formattedMessages
-        }, null, 2) 
-      }]
+        }, null, 2)
+      }],
+      structuredContent: { channelId, messageCount: formattedMessages.length, messages: formattedMessages }
     };
   } catch (error) {
     return handleDiscordError(error);
