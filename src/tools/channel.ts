@@ -259,16 +259,22 @@ export async function readMessagesHandler(
       replyTo: msg.reference ? msg.reference.messageId : null
     })).sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
 
+    // channel name
+    const channelName = ('name' in channel && typeof channel.name === "string") ? channel.name : undefined;
+
+    const payload: any = {
+      channelId,
+      messageCount: formattedMessages.length,
+      messages: formattedMessages
+    };
+    if (channelName !== undefined) payload.channelName = channelName;
+
     return {
       content: [{
-        type: "text",
-        text: JSON.stringify({
-          channelId,
-          messageCount: formattedMessages.length,
-          messages: formattedMessages
-        }, null, 2)
+      type: "text",
+      text: JSON.stringify(payload, null, 2)
       }],
-      structuredContent: { channelId, messageCount: formattedMessages.length, messages: formattedMessages }
+      structuredContent: payload
     };
   } catch (error) {
     return handleDiscordError(error);
