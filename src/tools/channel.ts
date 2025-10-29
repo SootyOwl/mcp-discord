@@ -248,7 +248,8 @@ export async function readMessagesHandler(
         title: embed.data.title,
         description: embed.data.description,
         url: embed.data.url,
-        image: embed.data.image ? embed.data.image.url : undefined,
+        thumbnail: embed.data.thumbnail,
+        image: embed.data.image,
         author: embed.data.author ? {
           name: embed.data.author.name,
           url: embed.data.author.url
