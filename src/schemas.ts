@@ -186,14 +186,14 @@ export const SearchMessagesSchema = z.object({
     content: z.string({ description: "Text to search for in messages." }).optional(),
     authorId: z.string({ description: "Filter by author user ID." }).optional(),
     mentions: z.string({ description: "Filter by mentioned user or role ID." }).optional(),
-    has: z.enum(['link', 'embed', 'file', 'poll', 'image', 'video', 'sound', 'sticker', 'snapshot', ''], { description: "Filter by content type." }).optional(),
+    has: z.enum(['link', 'embed', 'file', 'poll', 'image', 'video', 'sound', 'sticker', 'snapshot'], { description: "Filter by content type. Omit this parameter entirely if not filtering by content type." }).optional(),
     maxId: z.string({ description: "Max message ID (pagination)." }).optional(),
     minId: z.string({ description: "Min message ID (pagination)." }).optional(),
     channelId: z.string({ description: "Restrict to specific channel ID." }).optional(),
     pinned: z.boolean({ description: "Filter by pinned status (true/false/omit for both)." }).optional(),
-    authorType: z.enum(['user', 'bot', 'webhook', ''], { description: "Filter by author type." }).optional(),
-    sortBy: z.enum(['timestamp', 'relevance', ''], { description: "Sort field." }).optional(),
-    sortOrder: z.enum(['desc', 'asc', ''], { description: "Sort direction." }).optional(),
+    authorType: z.enum(['user', 'bot', 'webhook'], { description: "Filter by author type. Omit this parameter entirely if not filtering by author type." }).optional(),
+    sortBy: z.enum(['timestamp', 'relevance'], { description: "Sort field. Omit for default sorting." }).optional(),
+    sortOrder: z.enum(['desc', 'asc'], { description: "Sort direction. Omit for default sorting." }).optional(),
     limit: z.number({ description: "Results to return (1-25)." }).min(1).max(25).default(10).optional(),
     offset: z.number({ description: "Results to skip (pagination)." }).min(0).default(0).optional()
 }, {
