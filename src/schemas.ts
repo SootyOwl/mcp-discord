@@ -197,7 +197,7 @@ export const SearchMessagesSchema = z.object({
     limit: z.number({ description: "Results to return (1-25)." }).min(1).max(25).default(10).optional(),
     offset: z.number({ description: "Results to skip (pagination)." }).min(0).default(0).optional()
 }, {
-    description: "Search messages in server with filters."
+    description: "Search messages in server with filters.\n\nEXAMPLES OF CORRECT USAGE:\n\nBasic text search:\n{\"guildId\": \"123\", \"content\": \"hello\"}\n\nSearch by specific user:\n{\"guildId\": \"123\", \"authorId\": \"456\", \"content\": \"bug report\"}\n\nFind messages WITH links (note: only include 'has' when specifically searching FOR attachments):\n{\"guildId\": \"123\", \"has\": \"link\"}\n\nFind messages in specific channel:\n{\"guildId\": \"123\", \"channelId\": \"789\", \"content\": \"meeting\"}\n\nCOMMON MISTAKES TO AVOID:\n❌ {\"guildId\": \"123\", \"content\": \"hello\", \"has\": \"embed\", \"sortBy\": \"timestamp\"} // Don't include filters you don't need!\n✅ {\"guildId\": \"123\", \"content\": \"hello\"} // Clean and minimal\n\nKEY PRINCIPLE: Only include parameters you actually need for filtering. Unnecessary parameters severely restrict results."
 });
 
 // Bot presence/status schemas
