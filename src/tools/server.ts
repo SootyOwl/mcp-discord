@@ -1,8 +1,22 @@
 import { ChannelType } from "discord.js";
 import { handleDiscordError } from "../errorHandler.js";
 import { GetServerInfoSchema, ListServersSchema, SearchMessagesSchema } from "../schemas.js";
-import { ToolContext, ToolResponse } from "./types.js";
+import { SearchMessage, SearchMessagesResponse, ToolContext, ToolResponse } from "./types.js";
 
+// Helper function to remove null/undefined values from an object
+function removeNulls<T>(obj: T): T {
+  if (Array.isArray(obj)) {
+    return obj.map(item => removeNulls(item)) as unknown as T;
+  } else if (obj !== null && typeof obj === 'object') {
+    return Object.entries(obj).reduce((acc, [key, value]) => {
+      if (value !== null && value !== undefined) {
+        (acc as any)[key] = removeNulls(value);
+      }
+      return acc;
+    }, {} as Partial<T>) as T;
+  }
+  return obj;
+}
 
 // Search server messages handler
 export async function searchMessagesHandler(
@@ -41,14 +55,41 @@ export async function searchMessagesHandler(
     if (authorType) params.append('author_type', authorType);
     if (sortBy) params.append('sort_by', sortBy);
     if (sortOrder) params.append('sort_order', sortOrder);
-    params.append('limit', String(limit || 25));
-    params.append('offset', String(offset || 0));
+    if (limit) params.append('limit', String(limit));
+    if (offset) params.append('offset', String(offset));
 
-    const response = await context.client.rest.get(`/guilds/${guildId}/messages/search?${params.toString()}`);
+    const response = await context.client.rest.get(`/guilds/${guildId}/messages/search?${params.toString()}`) as unknown as SearchMessagesResponse;
+
+    if (!response || !response.messages || !Array.isArray(response.messages)) {
+      return {
+        content: [{ type: "text", text: "Failed to retrieve search results." }],
+        isError: true
+      };
+    }
+
+    // Transform the response to clean up author and remove nulls
+    const cleanedMessages: SearchMessage[][] = response.messages.map((messageGroup: any[]) =>
+      messageGroup.map((msg: any) => removeNulls({
+        ...msg,
+        author: msg.author
+          ? {
+            id: msg.author.id,
+            username: msg.author.username,
+            global_name: msg.author.global_name
+          }
+          : null
+      }))
+    );
+
+    const cleanedResponse: SearchMessagesResponse = {
+      messages: cleanedMessages,
+      doing_deep_historical_index: response.doing_deep_historical_index,
+      total_results: response.total_results
+    };
 
     return {
-      content: [{ type: "text", text: JSON.stringify(response, null, 2) }],
-      structuredContent: response
+      content: [{ type: "text", text: JSON.stringify(cleanedResponse, null, 2) }],
+      structuredContent: cleanedResponse
     };
   } catch (error) {
     return handleDiscordError(error);
