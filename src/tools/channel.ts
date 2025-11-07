@@ -223,6 +223,17 @@ export async function readMessagesHandler(
 
     // Fetch messages
     const messages = await channel.messages.fetch({ limit });
+    // If we're in a thread and below the limit, fetch the parent message as well
+    if (channel.isThread() && !channel.isThreadOnly() && messages.size < limit) {
+      if (messages.has(channel.id)) {
+        // Parent message already fetched
+      } else {
+        if (channel.parent?.isTextBased() && 'messages' in channel.parent) {
+          const parentMessage = await channel.parent.messages.fetch(channel.id).catch(() => null);
+          if (parentMessage) messages.set(parentMessage.id, parentMessage);
+        }
+      }
+    }
 
     if (messages.size === 0) {
       return {
