@@ -9,6 +9,7 @@ import {
   ReadMessagesSchema
 } from "../schemas.js";
 import { ToolContext, ToolResponse } from "./types.js";
+import { getRelativeTime } from "../utils.js";
 
 // Category creation handler
 export async function createCategoryHandler(
@@ -239,6 +240,8 @@ export async function readMessagesHandler(
         bot: msg.author.bot
       },
       timestamp: msg.createdAt,
+      // Add relative timestamp (e.g., "2 hours ago", "just now", "in 5 minutes")
+      relative_time: getRelativeTime(msg.createdAt),
       attachments: msg.attachments.map(att => ({
         filename: att.name,
         contentType: att.contentType,
@@ -271,8 +274,8 @@ export async function readMessagesHandler(
 
     return {
       content: [{
-      type: "text",
-      text: JSON.stringify(payload, null, 2)
+        type: "text",
+        text: JSON.stringify(payload, null, 2)
       }],
       structuredContent: payload
     };

@@ -2,6 +2,7 @@ import { ChannelType } from "discord.js";
 import { handleDiscordError } from "../errorHandler.js";
 import { GetServerInfoSchema, ListServersSchema, SearchMessagesSchema } from "../schemas.js";
 import { SearchMessage, SearchMessagesResponse, ToolContext, ToolResponse } from "./types.js";
+import { getRelativeTime } from "../utils.js";
 
 // Helper function to remove null/undefined values from an object
 function removeNulls<T>(obj: T): T {
@@ -69,16 +70,20 @@ export async function searchMessagesHandler(
 
     // Transform the response to clean up author and remove nulls
     const cleanedMessages: SearchMessage[][] = response.messages.map((messageGroup: any[]) =>
-      messageGroup.map((msg: any) => removeNulls({
-        ...msg,
-        author: msg.author
-          ? {
-            id: msg.author.id,
-            username: msg.author.username,
-            global_name: msg.author.global_name
-          }
-          : null
-      }))
+      messageGroup.map((msg: any) => {
+        const timestamp = msg.timestamp ? new Date(msg.timestamp) : null;
+        return removeNulls({
+          ...msg,
+          author: msg.author
+            ? {
+              id: msg.author.id,
+              username: msg.author.username,
+              global_name: msg.author.global_name
+            }
+            : null,
+          relative_time: timestamp ? getRelativeTime(timestamp) : null
+        });
+      })
     );
 
     const cleanedResponse: SearchMessagesResponse = {
