@@ -258,8 +258,11 @@ export async function readMessagesHandler(
         contentType: att.contentType,
         url: att.url
       })),
-      // if stickers are present, include their names
-      stickers: msg.stickers.map(sticker => sticker.name),
+      // if stickers are present, include their names and urls
+      stickers: msg.stickers.map(sticker => ({
+        name: sticker.name,
+        url: sticker.url
+      })),
       embeds: msg.embeds.map(embed => ({
         title: embed.data.title,
         description: embed.data.description,
