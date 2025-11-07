@@ -1,4 +1,6 @@
-import humanize from 'humanize';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const humanize = require('humanize');
 
 export function getRelativeTime(createdAt: Date): string {
   // humanize expects Unix timestamp in seconds
