@@ -34,7 +34,7 @@ export const sendMessageHandler: ToolHandler = async (args, { client }) => {
             await channel.messages.fetch(replyToMessageId);
             messageOptions.reply = { messageReference: replyToMessageId };
             // Control whether the replied-to user is notified (pinged)
-            messageOptions.allowedMentions = { repliedUser: notifyRepliedUser ?? false };
+            messageOptions.allowedMentions = { repliedUser: notifyRepliedUser };
           } catch (error) {
             return {
               content: [{ type: "text", text: `Cannot find message with ID: ${replyToMessageId} in channel ${channelId}` }],

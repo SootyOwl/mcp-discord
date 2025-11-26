@@ -10,7 +10,7 @@ export const SendMessageSchema = z.object({
     channelId: z.string({ description: "Channel ID to send message to." }),
     message: z.string({ description: "Message content." }),
     replyToMessageId: z.string({ description: "Message ID to reply to." }).optional(),
-    notifyRepliedUser: z.boolean({ description: "Whether to notify (ping) the replied-to user. Only applies when replyToMessageId is provided." }).default(false).optional()
+    notifyRepliedUser: z.boolean({ description: "Whether to notify (ping) the replied-to user. Only applies when replyToMessageId is provided." }).default(false)
 }, {
     description: "Send message to channel, optionally as reply."
 });
