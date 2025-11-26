@@ -3,7 +3,7 @@ import { ToolHandler } from './types.js';
 import { handleDiscordError } from "../errorHandler.js";
 
 export const sendMessageHandler: ToolHandler = async (args, { client }) => {
-  const { channelId, message, replyToMessageId } = SendMessageSchema.parse(args);
+  const { channelId, message, replyToMessageId, notifyRepliedUser } = SendMessageSchema.parse(args);
   
   try {
     if (!client.isReady()) {
@@ -33,6 +33,8 @@ export const sendMessageHandler: ToolHandler = async (args, { client }) => {
             // Verify the message exists
             await channel.messages.fetch(replyToMessageId);
             messageOptions.reply = { messageReference: replyToMessageId };
+            // Control whether the replied-to user is notified (pinged)
+            messageOptions.allowedMentions = { repliedUser: notifyRepliedUser ?? false };
           } catch (error) {
             return {
               content: [{ type: "text", text: `Cannot find message with ID: ${replyToMessageId} in channel ${channelId}` }],
