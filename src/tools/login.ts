@@ -30,19 +30,19 @@ async function waitForReady(client: Client, token: string, timeoutMs = 30000): P
     // Listen for error event
     const errorHandler = (err: Error) => {
       clearTimeout(timeout);
-      client.removeListener('ready', readyHandler);
+      client.removeListener('clientReady', readyHandler);
       reject(err);
     };
     
     // Attach listeners
-    client.once('ready', readyHandler);
+    client.once('clientReady', readyHandler);
     client.once('error', errorHandler);
     
     // Start login process
     info('Starting login process and waiting for ready event');
     client.login(token).catch((err: Error) => {
       clearTimeout(timeout);
-      client.removeListener('ready', readyHandler);
+      client.removeListener('clientReady', readyHandler);
       client.removeListener('error', errorHandler);
       reject(err);
     });
