@@ -11,6 +11,7 @@ import { error, info, Level, setLevel, warning } from './notifications.js';
 import * as schemas from './schemas.js';
 import * as handlers from './tools/tools.js';
 import { createToolContext } from './tools/tools.js';
+import { preserveBigIntegers } from './utils.js';
 
 // Load environment variables from .env file if exists
 dotenvConfig();
@@ -198,7 +199,16 @@ const discord = createDiscordClient(config.DISCORD_TOKEN);
 const server = createMcpServer(discord);
 
 const app = express();
-app.use(express.json());
+// Use a custom JSON body parser that preserves large integers (Discord snowflakes)
+// as strings. Standard JSON.parse loses precision on numbers > Number.MAX_SAFE_INTEGER.
+// LLMs frequently output snowflake IDs as bare JSON numbers, which corrupts them.
+app.use(express.text({ type: 'application/json' }));
+app.use((req: Request, _res: Response, next: express.NextFunction) => {
+    if (typeof req.body === 'string' && req.body.length > 0) {
+        req.body = JSON.parse(preserveBigIntegers(req.body));
+    }
+    next();
+});
 
 // region MCP Streamable HTTP Transport Handlers
 const transports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
